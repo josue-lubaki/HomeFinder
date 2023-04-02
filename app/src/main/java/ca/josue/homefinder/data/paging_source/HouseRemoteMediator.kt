@@ -83,8 +83,10 @@ class HouseRemoteMediator @Inject constructor(
                 }
             }
 
+            val token = null // TODO: get token from shared preferences
+
             val headers = mapOf(
-                "Authorization" to "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJIb21lRmluZGVyQXVkaWVuY2UiLCJyb2xlIjoiQURNSU4iLCJpc3MiOiJodHRwOi8vMC4wLjAuMDo4MDgwIiwiZXhwIjoxNjgwNDI3Mjg4LCJ1c2VySWQiOiI2NDI5M2RhNTkzODIwMDJlNmIwZGZhNGQifQ.PPdSU-oNshCUnIu8XtVMFnJYIRO19LIwzKbaiJ7edpU"
+                "Authorization" to "Bearer $token"
             )
             val response = service.getAllHouses(
                 page = page,
