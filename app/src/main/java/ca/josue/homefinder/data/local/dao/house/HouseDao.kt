@@ -25,7 +25,7 @@ interface HouseDao {
     @Query("DELETE FROM houses_table")
     suspend fun deleteAllHouses()
 
-    @Query("SELECT * FROM houses_table ORDER BY uuid ASC")
+    @Query("SELECT * FROM houses_table ORDER BY uuid DESC")
     fun getAllHouses(): PagingSource<Int, House>
 
     @Query("SELECT * FROM houses_table WHERE id = :id")

@@ -2,14 +2,17 @@ package ca.josue.homefinder.presentation.house
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import ca.josue.homefinder.presentation.house.components.CardHouse
 import timber.log.Timber
 
 /**
@@ -26,16 +29,20 @@ fun HomeScreen(
 
     // TODO : Need Scaffold
     LazyColumn(
+        modifier = Modifier.padding(bottom = 12.dp),
         contentPadding = PaddingValues(all = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ){
         items(
             items = allHouses,
             key = { house -> house.id }
         ){house ->
-            Text(text = house?.uuid.toString() + " - " + house?.address?.city)
-            Timber.d("36 - HomeScreen : $house")
-            // TODO : 21 - Create a HouseItem composable
+            if (house != null) {
+                CardHouse(
+                    house = house,
+                    isLiked = false,
+                )
+            }
         }
     }
 
