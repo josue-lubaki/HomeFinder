@@ -30,7 +30,7 @@ class HouseRemoteMediator @Inject constructor(
     override suspend fun initialize(): InitializeAction {
         val currentTimestamp = System.currentTimeMillis()
         val lastUpdated = houseRemoteKeysDao.getLastUpdatedRemoteKeys()?.lastUpdated ?: 0
-        val cacheTimeOut = 30 // 30 minutes
+        val cacheTimeOut = 10 // 10 minutes
 
         val cachedExpired = (currentTimestamp - lastUpdated) > (cacheTimeOut * 60 * 1000)
 
