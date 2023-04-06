@@ -1,7 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">HomeFinder</string>
     <string name="condo">Condo</string>
-    <string name="single_family">Single Family</string>
+    <string name="single_family">Famille unique</string>
     <string name="multiplex">Multiplex</string>
     <string name="chalet">Chalet</string>
 </resources>

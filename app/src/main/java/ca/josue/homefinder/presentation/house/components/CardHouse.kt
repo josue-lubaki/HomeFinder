@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -30,7 +29,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -38,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -49,6 +48,7 @@ import ca.josue.homefinder.domain.models.Address
 import ca.josue.homefinder.domain.models.House
 import ca.josue.homefinder.domain.models.Owner
 import ca.josue.homefinder.ui.theme.HomeFinderTheme
+import ca.josue.homefinder.ui.theme.dimensions
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
@@ -69,11 +69,11 @@ fun CardHouse(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp)
+            .padding(horizontal = MaterialTheme.dimensions.small)
             .clip(
                 RoundedCornerShape(
-                    topStart = 12.dp,
-                    topEnd = 12.dp,
+                    topStart = MaterialTheme.dimensions.semiMedium,
+                    topEnd = MaterialTheme.dimensions.semiMedium,
                 )
             ),
         verticalArrangement = Arrangement.Top
@@ -127,11 +127,11 @@ fun CardHouse(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(gradient)
-                        .height(440.dp),
+                        .height(MaterialTheme.dimensions.imageHeightDefault),
                     color = Color.LightGray.copy(alpha = 0.5f),
                     shape = RoundedCornerShape(
-                        topStart = 12.dp,
-                        topEnd = 12.dp,
+                        topStart = MaterialTheme.dimensions.semiMedium,
+                        topEnd = MaterialTheme.dimensions.semiMedium,
                     )
                 ) {}
             }
@@ -148,8 +148,8 @@ fun CardHouse(
         Column(
             modifier = Modifier
                 .background(Color.LightGray.copy(alpha = 0.3f))
-                .padding(8.dp),
-            verticalArrangement = Arrangement.spacedBy(2.dp),
+                .padding(MaterialTheme.dimensions.small),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.tiny),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -160,12 +160,12 @@ fun CardHouse(
                 FormattedPrice(price = house.price.toDouble())
 
                 IconButton(
-                    modifier = Modifier.height(36.dp),
+                    modifier = Modifier.height(MaterialTheme.dimensions.semiExtraLarge),
                     onClick = { /*TODO*/ },
                 ) {
                     Icon(
                         imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                        contentDescription = "Favorite",
+                        contentDescription = "Favorite Icon",
                         tint = if (isLiked) Color.Red else Color.Black,
                     )
                 }
@@ -174,12 +174,12 @@ fun CardHouse(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.semiSmall),
             ) {
                 Icon(
                     modifier = Modifier.height(MaterialTheme.typography.bodyLarge.fontSize.value.dp),
                     imageVector = Icons.Outlined.Place,
-                    contentDescription = "Place",
+                    contentDescription = "Place Icon",
                     tint = Color.Black,
                 )
 
@@ -191,28 +191,28 @@ fun CardHouse(
             }
 
             Text(
-                modifier = Modifier.padding(start = 4.dp),
+                modifier = Modifier.padding(start = MaterialTheme.dimensions.semiSmall),
                 text = "${house.address.number}, ${house.address.street}",
                 style = MaterialTheme.typography.bodyMedium,
             )
 
             Box(
                 modifier = Modifier
-                    .padding(vertical = 4.dp)
+                    .padding(vertical = MaterialTheme.dimensions.semiSmall)
                     .background(
                         color = Color.Green.copy(alpha = 0.4f),
-                        shape = RoundedCornerShape(8.dp)
+                        shape = RoundedCornerShape(MaterialTheme.dimensions.small)
                     )
                     .padding(
-                        horizontal = 8.dp,
-                        vertical = 4.dp
+                        horizontal = MaterialTheme.dimensions.small,
+                        vertical = MaterialTheme.dimensions.semiSmall
                     ),
                 contentAlignment = Alignment.Center,
             ) {
                 when (house.type) {
                     HouseType.CONDO.name -> {
                         Text(
-                            text = "Condo",
+                            text = stringResource(R.string.condo),
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.SemiBold,
                         )
@@ -220,7 +220,7 @@ fun CardHouse(
 
                     HouseType.SINGLE_FAMILY.name -> {
                         Text(
-                            text = "Single Family",
+                            text = stringResource(R.string.single_family),
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.SemiBold,
                         )
@@ -228,7 +228,7 @@ fun CardHouse(
 
                     HouseType.MULTIPLEX.name -> {
                         Text(
-                            text = "Multiplex",
+                            text = stringResource(R.string.multiplex),
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.SemiBold,
                         )
@@ -236,7 +236,7 @@ fun CardHouse(
 
                     HouseType.CHALET.name -> {
                         Text(
-                            text = "Chalet",
+                            text = stringResource(R.string.chalet),
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.SemiBold,
                         )
@@ -280,7 +280,7 @@ private fun CardHousePreview() {
                 .background(
                     color = Color.White,
                 )
-                .padding(8.dp),
+                .padding(MaterialTheme.dimensions.small),
         ) {
             CardHouse(
                 isLiked = true,
