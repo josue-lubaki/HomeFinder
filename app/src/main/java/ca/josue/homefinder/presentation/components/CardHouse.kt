@@ -1,4 +1,4 @@
-package ca.josue.homefinder.presentation.house.components
+package ca.josue.homefinder.presentation.components
 
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.RepeatMode

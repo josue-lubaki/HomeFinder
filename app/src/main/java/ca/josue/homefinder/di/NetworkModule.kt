@@ -10,6 +10,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -57,4 +59,8 @@ object NetworkModule {
             database = database
         )
     }
+
+    @Provides
+    @Singleton
+    fun provideDispatcher() : CoroutineDispatcher = Dispatchers.IO
 }

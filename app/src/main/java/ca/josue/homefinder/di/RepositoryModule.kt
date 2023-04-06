@@ -6,6 +6,8 @@ import ca.josue.homefinder.data.repository.onboarding.DataStoreOperationsImpl
 import ca.josue.homefinder.domain.repository.DataStoreOperations
 import ca.josue.homefinder.domain.usecases.UseCases
 import ca.josue.homefinder.domain.usecases.get_all_houses.GetAllHousesUseCase
+import ca.josue.homefinder.domain.usecases.read_onboarding.ReadOnBoardingUseCase
+import ca.josue.homefinder.domain.usecases.save_onboarding.SaveOnBoardingUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,6 +30,8 @@ object RepositoryModule {
     fun provideUseCases(repository: Repository) : UseCases {
         return UseCases(
             getAllHousesUseCase = GetAllHousesUseCase(repository),
+            readOnBoardingUseCase = ReadOnBoardingUseCase(repository),
+            saveOnBoardingUseCase = SaveOnBoardingUseCase(repository)
         )
     }
 }

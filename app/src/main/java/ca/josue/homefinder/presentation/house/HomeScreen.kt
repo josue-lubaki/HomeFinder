@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -12,8 +12,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
-import ca.josue.homefinder.presentation.house.components.CardHouse
-import timber.log.Timber
+import ca.josue.homefinder.presentation.components.CardHouse
 
 /**
  * created by Josue Lubaki
@@ -22,7 +21,7 @@ import timber.log.Timber
  */
 @Composable
 fun HomeScreen(
-    navController: NavHostController,
+    windowSize: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     val allHouses = homeViewModel.getAllHeroes.collectAsLazyPagingItems()

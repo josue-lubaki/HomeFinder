@@ -22,6 +22,7 @@ buildscript {
         orhanobut_logger_version = findProperty("version.orhanobut.logger")
         serialization_version = findProperty("version.serialization")
         paging_compose_version = findProperty("version.paging.compose")
+        lottie_version = findProperty("version.lottie")
     }
     dependencies {
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_dagger_version"
