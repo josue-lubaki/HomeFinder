@@ -126,6 +126,9 @@ dependencies {
     // Hilt testing dependency
     androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_dagger_version"
     kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hilt_dagger_version"
+
+    // lottie airbnb
+    implementation "com.airbnb.android:lottie-compose:$lottie_version"
 }
 
 kapt {

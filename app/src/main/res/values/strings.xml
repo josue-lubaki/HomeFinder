@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">HomeFinder</string>
+    <string name="condo">Condo</string>
+    <string name="single_family">Single Family</string>
+    <string name="multiplex">Multiplex</string>
+    <string name="chalet">Chalet</string>
+    <string name="welcome">Welcome</string>
+    <string name="onBoarding_image">onBoarding image</string>
+    <string name="finish">Finish</string>
+    <string name="welcome_slide_desciption">We\'re excited to welcome you to our home sales app. With our large selection of properties and streamlined search process, you\'ll find your new home in no time.</string>
+    <string name="find_your_home">Find the home of your dreams</string>
+    <string name="find_your_home_description">Our home selling app makes it easy to find the home of your dreams. Use our search filters to refine your results and find the home that best suits your needs. With high quality photos and detailed descriptions, you can view properties before you even visit.</string>
+    <string name="commitment_to_you">Our commitment to you</string>
+    <string name="commitment_to_you_desciption">We are committed to providing you with an exceptional home search and purchase experience. We look forward to helping you find the home of your dreams and to being with you through this important step in your life.</string>
 </resources>

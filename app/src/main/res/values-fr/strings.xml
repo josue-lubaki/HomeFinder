@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HomeFinder</string>
+    <string name="condo">Condo</string>
+    <string name="single_family">Famille unique</string>
+    <string name="multiplex">Multiplex</string>
+    <string name="chalet">Chalet</string>
+    <string name="finish">Terminer</string>
+    <string name="onBoarding_image">onBoarding image</string>
+    <string name="welcome">Bienvenue</string>
+    <string name="welcome_slide_desciption">Nous sommes heureux de vous accueillir sur notre application de vente de maisons. Grâce à notre vaste sélection de propriétés et à notre processus de recherche simplifié, vous trouverez votre nouvelle maison en un rien de temps.</string>
+    <string name="find_your_home">Trouvez la maison de vos rêves</string>
+    <string name="find_your_home_description">Notre application de vente de maisons vous permet de trouver facilement la maison de vos rêves. Utilisez nos filtres de recherche pour affiner vos résultats et trouvez la maison qui répond le mieux à vos besoins. Avec des photos de haute qualité et des descriptions détaillées, vous pouvez visualiser les propriétés avant même de les visiter.</string>
+    <string name="commitment_to_you">Notre engagement envers vous</string>
+    <string name="commitment_to_you_desciption">Nous sommes engagés à vous fournir une expérience de recherche et d\'achat de maison exceptionnelle. Nous sommes impatients de vous aider à trouver la maison de vos rêves et de vous accompagner dans cette étape importante de votre vie.</string>
+</resources>

@@ -1,13 +1,13 @@
 package ca.josue.homefinder.navigation
 
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
-import ca.josue.homefinder.presentation.house.HomeScreen
-import ca.josue.homefinder.utils.Constants.DETAILS_ARGUMENT_KEY
+import ca.josue.homefinder.presentation.login.LoginViewModel
+import ca.josue.homefinder.presentation.splash.SplashViewModel
+import ca.josue.homefinder.presentation.welcome.WelcomeViewModel
 
 /**
  * created by Josue Lubaki
@@ -16,28 +16,33 @@ import ca.josue.homefinder.utils.Constants.DETAILS_ARGUMENT_KEY
  */
 
 @Composable
-fun SetupNavGraph(navController : NavHostController) {
+fun SetupNavGraph(
+    navController : NavHostController,
+    windowSize : WindowWidthSizeClass,
+    welcomeViewModel: WelcomeViewModel = hiltViewModel(),
+    splashViewModel: SplashViewModel = hiltViewModel(),
+    loginViewModel : LoginViewModel = hiltViewModel()
+) {
     NavHost(
         navController = navController,
-        startDestination = Screen.Home.route
+        startDestination = Graph.ROOT
     ){
-        composable(Screen.Splash.route){
-//            SplashScreen(navController = navController)
-        }
-        composable(Screen.Welcome.route){
-//            WelcomeScreen(navController = navController)
-        }
-        composable(Screen.Home.route){
-            HomeScreen(navController = navController)
-        }
-        composable(
-            route = Screen.Details.route,
-            arguments = listOf(navArgument(DETAILS_ARGUMENT_KEY) { type = NavType.IntType })
-        ) {
-//            DetailsScreen(navController = navController)
-        }
-        composable(Screen.Search.route){
-//            SearchScreen(navController = navController)
-        }
+        rootNavigationGraph(
+            navController = navController,
+            windowSize = windowSize,
+            welcomeViewModel = welcomeViewModel,
+            splashViewModel = splashViewModel
+        )
+
+        authNavigationGraph(
+            navController = navController,
+            windowSize = windowSize,
+            loginViewModel = loginViewModel
+        )
+
+        mainNavigation(
+            navController = navController,
+            windowSize = windowSize,
+        )
     }
 }
