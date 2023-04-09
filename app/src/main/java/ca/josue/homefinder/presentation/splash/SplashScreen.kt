@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import ca.josue.homefinder.navigation.Graph
 import ca.josue.homefinder.navigation.Screen
 import ca.josue.homefinder.utils.Constants.LOTTIE_URL
+import ca.josue.homefinder.utils.Constants.MAX_SLEEP_TIME
 import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -41,7 +42,7 @@ fun SplashScreen(
 
     LaunchedEffect(key1 = true) {
         withContext(Dispatchers.IO) {
-            sleep(3500)
+            sleep(MAX_SLEEP_TIME)
         }
 
         when (onBoardingState) {
