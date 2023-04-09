@@ -5,7 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import ca.josue.homefinder.presentation.login.LoginScreen
+import ca.josue.homefinder.presentation.login.LoginScreenRoute
 import ca.josue.homefinder.presentation.login.LoginViewModel
 
 /**
@@ -24,9 +24,12 @@ fun NavGraphBuilder.authNavigationGraph(
         startDestination = Screen.Login.route
     ) {
         composable(Screen.Login.route) {
-            LoginScreen(
+            LoginScreenRoute(
                 windowSize = windowSize,
                 viewModel = loginViewModel,
+                onNavigateToRegister = {
+                    navController.navigate(Screen.Register.route)
+                }
             )
         }
 
