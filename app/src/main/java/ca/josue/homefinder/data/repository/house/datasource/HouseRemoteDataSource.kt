@@ -2,6 +2,7 @@ package ca.josue.homefinder.data.repository.house.datasource
 
 import androidx.paging.PagingData
 import ca.josue.homefinder.domain.models.House
+import ca.josue.homefinder.domain.models.HouseStatus
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -11,5 +12,5 @@ import kotlinx.coroutines.flow.Flow
  */
 
 interface HouseRemoteDataSource {
-    fun getAllHouses(): Flow<PagingData<House>>
+    fun getAllHouses(token : String): HouseStatus
 }

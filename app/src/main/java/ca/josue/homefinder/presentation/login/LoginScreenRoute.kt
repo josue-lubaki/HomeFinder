@@ -1,5 +1,6 @@
 package ca.josue.homefinder.presentation.login
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,8 +17,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowCircleRight
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,6 +33,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -43,10 +49,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ca.josue.homefinder.R
 import ca.josue.homefinder.presentation.components.CircularProgressBar
 import ca.josue.homefinder.ui.theme.HomeFinderTheme
 import ca.josue.homefinder.ui.theme.dimensions
+import timber.log.Timber
 
 /**
  * created by Josue Lubaki
@@ -54,19 +62,50 @@ import ca.josue.homefinder.ui.theme.dimensions
  * version : 1.0.0
  */
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun LoginScreenRoute(
     windowSize: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
     viewModel: LoginViewModel,
     onNavigateToRegister: () -> Unit,
+    onNavigateToHome: () -> Unit,
 ) {
 
-    val onLoginPressed: () -> Unit = {
-        // TODO : Attempt to login
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val errorMessage = rememberSaveable { mutableStateOf<String?>(null) }
+
+    val onLoginPressed: (String, String) -> Unit = { username, password ->
+        viewModel.onLogin(username, password)
+    }
+
+    LaunchedEffect(key1 = state){
+        when(state) {
+            is LoginState.Success -> {
+                onNavigateToHome()
+            }
+            is LoginState.Error -> {
+                errorMessage.value = (state as LoginState.Error).exception.message
+            }
+            else -> Unit
+        }
+    }
+
+    // show Snackbar when errorMessage is not null
+    if (errorMessage.value != null) {
+        val scaffoldState: ScaffoldState = rememberScaffoldState()
+
+        Scaffold(scaffoldState = scaffoldState) {
+            LaunchedEffect(key1 = scaffoldState){
+                scaffoldState.snackbarHostState.showSnackbar(
+                    message = errorMessage.value!!,
+                    actionLabel = "Do something"
+                )
+            }
+        }
     }
 
     LoginScreen(
-        state = LoginState.Loading,
+        state = state,
         onLoginPressed = onLoginPressed,
         onRegisterPressed = onNavigateToRegister
     )
@@ -76,7 +115,7 @@ fun LoginScreenRoute(
 @Composable
 fun LoginScreen(
     state : LoginState,
-    onLoginPressed: () -> Unit,
+    onLoginPressed: (username : String, password : String) -> Unit,
     onRegisterPressed: () -> Unit,
 ) {
     val gradientColors = listOf(
@@ -84,11 +123,11 @@ fun LoginScreen(
         Color(0xFF080F1A).copy(alpha = 0.4f),
     )
     val scrollState = rememberScrollState()
-    val loginValue = rememberSaveable { mutableStateOf("") }
-    val passwordValue = rememberSaveable { mutableStateOf("") }
+    val usernameValue = rememberSaveable { mutableStateOf("josuelubaki") }
+    val passwordValue = rememberSaveable { mutableStateOf("Josue2022@") }
     val isPasswordValid = remember(passwordValue.value) { passwordValue.value.length >= 6 }
-    val isFormValid = remember(loginValue.value, passwordValue.value) {
-        loginValue.value.isNotEmpty() && isPasswordValid
+    val isFormValid = remember(usernameValue.value, passwordValue.value) {
+        usernameValue.value.isNotEmpty() && isPasswordValid
     }
 
     Image(
@@ -145,8 +184,8 @@ fun LoginScreen(
                         placeholder = {
                             Text(text = stringResource(id = R.string.username))
                         },
-                        value = loginValue.value,
-                        onValueChange = loginValue::value::set,
+                        value = usernameValue.value,
+                        onValueChange = usernameValue::value::set,
                         colors = TextFieldDefaults.textFieldColors(
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
@@ -206,7 +245,10 @@ fun LoginScreen(
                             .padding(end = MaterialTheme.dimensions.medium)
                             .weight(.3f)
                             .height(MaterialTheme.dimensions.xLarge),
-                        onClick = { onLoginPressed() },
+                        onClick = { onLoginPressed(
+                            usernameValue.value,
+                            passwordValue.value
+                        ) },
                         enabled = isFormValid,
                     ) {
                         Icon(
@@ -231,8 +273,8 @@ fun LoginScreen(
 private fun LoginScreenPreview() {
     HomeFinderTheme {
         LoginScreen(
-            state = LoginState.Loading,
-            onLoginPressed = { },
+            state = LoginState.Idle,
+            onLoginPressed = {_,_ -> },
             onRegisterPressed = { }
         )
     }

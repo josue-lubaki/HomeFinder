@@ -6,6 +6,7 @@ buildscript {
 
         compose_ui_version = findProperty("version.compose.ui")
         compose_material_version = findProperty("version.compose.material")
+        lifecycle_runtime_compose_version = findProperty("version.lifecycle.runtime.compose")
         hilt_dagger_version = "${findProperty("version.daggerHilt")}"
         room_version = findProperty("version.room")
         retrofit_version = findProperty("version.retrofit")

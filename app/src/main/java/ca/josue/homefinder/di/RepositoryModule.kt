@@ -2,11 +2,17 @@ package ca.josue.homefinder.di
 
 import android.content.Context
 import ca.josue.homefinder.data.repository.Repository
+import ca.josue.homefinder.data.repository.authentication.AuthenticationRepositoryImpl
+import ca.josue.homefinder.data.repository.authentication.datasource.AuthenticationRemoteDataSource
 import ca.josue.homefinder.data.repository.onboarding.DataStoreOperationsImpl
+import ca.josue.homefinder.domain.repository.AuthenticationRepository
 import ca.josue.homefinder.domain.repository.DataStoreOperations
 import ca.josue.homefinder.domain.usecases.UseCases
 import ca.josue.homefinder.domain.usecases.get_all_houses.GetAllHousesUseCase
+import ca.josue.homefinder.domain.usecases.login_user.LoginUseCase
+import ca.josue.homefinder.domain.usecases.read_access_token.ReadAccessTokenUseCase
 import ca.josue.homefinder.domain.usecases.read_onboarding.ReadOnBoardingUseCase
+import ca.josue.homefinder.domain.usecases.save_access_token.SaveAccessTokenUseCase
 import ca.josue.homefinder.domain.usecases.save_onboarding.SaveOnBoardingUseCase
 import dagger.Module
 import dagger.Provides
@@ -27,11 +33,31 @@ object RepositoryModule {
 
     @Provides
     @Singleton
+    fun provideAuthenticationRepository(remoteDataSource : AuthenticationRemoteDataSource) : AuthenticationRepository {
+        return AuthenticationRepositoryImpl(remoteDataSource = remoteDataSource)
+    }
+
+//    @Provides
+//    @Singleton
+//    fun provideReadAccessTokenUseCase(repository: Repository) : ReadAccessTokenUseCase {
+//        return ReadAccessTokenUseCase(repository)
+//    }
+
+    @Provides
+    @Singleton
+    fun provideReadAccessTokenUseCase(dataStoreOperations: DataStoreOperations) : ReadAccessTokenUseCase {
+        return ReadAccessTokenUseCase(dataStoreOperations)
+    }
+
+    @Provides
+    @Singleton
     fun provideUseCases(repository: Repository) : UseCases {
         return UseCases(
             getAllHousesUseCase = GetAllHousesUseCase(repository),
             readOnBoardingUseCase = ReadOnBoardingUseCase(repository),
-            saveOnBoardingUseCase = SaveOnBoardingUseCase(repository)
+            saveOnBoardingUseCase = SaveOnBoardingUseCase(repository),
+//            readAccessTokenUseCase = ReadAccessTokenUseCase(repository),
+            saveAccessTokenUseCase = SaveAccessTokenUseCase(repository),
         )
     }
 }

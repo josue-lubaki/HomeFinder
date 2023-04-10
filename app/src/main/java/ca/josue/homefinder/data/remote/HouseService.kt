@@ -13,7 +13,7 @@ import retrofit2.http.Query
 
 interface HouseService {
 
-    @GET("houses")
+    @GET("/api/v1/houses")
     suspend fun getAllHouses(
         @Query("page") page : Int = 1,
         @HeaderMap headers: Map<String, String>

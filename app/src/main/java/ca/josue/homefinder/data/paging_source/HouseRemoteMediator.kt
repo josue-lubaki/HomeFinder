@@ -10,6 +10,12 @@ import ca.josue.homefinder.data.mapper.toDomain
 import ca.josue.homefinder.domain.models.House
 import ca.josue.homefinder.data.remote.HouseService
 import ca.josue.homefinder.domain.models.HouseRemoteKeys
+import ca.josue.homefinder.domain.usecases.read_access_token.ReadAccessTokenUseCase
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -22,6 +28,7 @@ import javax.inject.Inject
 class HouseRemoteMediator @Inject constructor(
     private val service : HouseService,
     private val database: HomeFinderDB,
+    private val token : String
 ) : RemoteMediator<Int, House>() {
 
     private val houseDao = database.houseDao()
@@ -83,11 +90,10 @@ class HouseRemoteMediator @Inject constructor(
                 }
             }
 
-            val token = null // TODO: get token from shared preferences
-
             val headers = mapOf(
                 "Authorization" to "Bearer $token"
             )
+
             val response = service.getAllHouses(
                 page = page,
                 headers = headers

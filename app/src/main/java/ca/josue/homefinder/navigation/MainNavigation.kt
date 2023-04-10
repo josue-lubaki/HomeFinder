@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import ca.josue.homefinder.presentation.details.DetailsScreen
-import ca.josue.homefinder.presentation.house.HomeScreen
+import ca.josue.homefinder.presentation.house.HomeScreenRoute
 import ca.josue.homefinder.utils.Constants
 
 /**
@@ -26,7 +26,7 @@ fun NavGraphBuilder.mainNavigation(
         startDestination = Screen.Home.route
     ) {
         composable(Screen.Home.route) {
-            HomeScreen(
+            HomeScreenRoute(
                 windowSize = windowSize,
             )
         }

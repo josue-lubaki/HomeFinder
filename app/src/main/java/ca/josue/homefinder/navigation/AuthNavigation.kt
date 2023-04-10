@@ -17,7 +17,9 @@ import ca.josue.homefinder.presentation.login.LoginViewModel
 fun NavGraphBuilder.authNavigationGraph(
     navController: NavHostController,
     windowSize: WindowWidthSizeClass,
-    loginViewModel : LoginViewModel
+    loginViewModel : LoginViewModel,
+    onNavigateToRegister: () -> Unit,
+    onNavigateToHome: () -> Unit,
 ) {
     navigation(
         route = Graph.AUTH,
@@ -27,9 +29,8 @@ fun NavGraphBuilder.authNavigationGraph(
             LoginScreenRoute(
                 windowSize = windowSize,
                 viewModel = loginViewModel,
-                onNavigateToRegister = {
-                    navController.navigate(Screen.Register.route)
-                }
+                onNavigateToRegister = onNavigateToRegister,
+                onNavigateToHome = onNavigateToHome
             )
         }
 

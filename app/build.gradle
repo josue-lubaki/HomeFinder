@@ -23,7 +23,7 @@ android {
             useSupportLibrary true
         }
 
-        buildConfigField "String", "BASE_URL", "\"https://homefinder-ktor-server.herokuapp.com/api/v1/\""
+        buildConfigField "String", "BASE_URL", "\"https://homefinder-ktor-server.herokuapp.com/\""
     }
 
     buildTypes {
@@ -112,6 +112,9 @@ dependencies {
     // Placeholder - Accompanist
     implementation "com.google.accompanist:accompanist-placeholder-material:$accompanist_version"
     implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
+
+    // CollectAsStateWithLifecycle
+    implementation "androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_runtime_compose_version"
 
     // Testing
     testImplementation 'junit:junit:4.13.2'
