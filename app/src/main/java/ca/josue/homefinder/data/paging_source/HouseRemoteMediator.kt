@@ -7,15 +7,9 @@ import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import ca.josue.homefinder.data.local.db.HomeFinderDB
 import ca.josue.homefinder.data.mapper.toDomain
-import ca.josue.homefinder.domain.models.House
 import ca.josue.homefinder.data.remote.HouseService
+import ca.josue.homefinder.domain.models.House
 import ca.josue.homefinder.domain.models.HouseRemoteKeys
-import ca.josue.homefinder.domain.usecases.read_access_token.ReadAccessTokenUseCase
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -26,9 +20,8 @@ import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
 class HouseRemoteMediator @Inject constructor(
-    private val service : HouseService,
-    private val database: HomeFinderDB,
-    private val token : String
+    private val service: HouseService,
+    private val database: HomeFinderDB
 ) : RemoteMediator<Int, House>() {
 
     private val houseDao = database.houseDao()
@@ -75,33 +68,30 @@ class HouseRemoteMediator @Inject constructor(
         state: PagingState<Int, House>
     ): MediatorResult {
         try {
-            val page = when(loadType){
+            val page = when (loadType) {
                 LoadType.REFRESH -> {
                     val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
                     remoteKeys?.nextPage?.minus(1) ?: 1
                 }
+
                 LoadType.PREPEND -> {
                     val remoteKeys = getRemoteKeyForFirstItem(state)
-                    remoteKeys?.prevPage ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
+                    remoteKeys?.prevPage
+                        ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
                 }
+
                 LoadType.APPEND -> {
                     val remoteKeys = getRemoteKeyForLastItem(state)
-                    remoteKeys?.nextPage ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
+                    remoteKeys?.nextPage
+                        ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
                 }
             }
 
-            val headers = mapOf(
-                "Authorization" to "Bearer $token"
-            )
+            val response = service.getAllHouses(page = page)
 
-            val response = service.getAllHouses(
-                page = page,
-                headers = headers
-            )
-
-            if(response.data.isNotEmpty()){
+            if (response.data.isNotEmpty()) {
                 database.withTransaction {
-                    if(loadType == LoadType.REFRESH){
+                    if (loadType == LoadType.REFRESH) {
                         houseDao.deleteAllHouses()
                         houseRemoteKeysDao.deleteAllRemoteKeys()
                     }
@@ -120,7 +110,7 @@ class HouseRemoteMediator @Inject constructor(
                 }
             }
             return MediatorResult.Success(endOfPaginationReached = response.nextPage == null)
-        } catch (e: Exception){
+        } catch (e: Exception) {
             return MediatorResult.Error(e)
         }
     }

@@ -8,20 +8,17 @@ import ca.josue.homefinder.data.repository.authentication.datasource.Authenticat
 import ca.josue.homefinder.data.repository.authentication.datasourceimpl.AuthenticationRemoteDataSourceImpl
 import ca.josue.homefinder.data.repository.house.datasource.HouseRemoteDataSource
 import ca.josue.homefinder.data.repository.house.datasourceimpl.HouseRemoteDataSourceImpl
+import ca.josue.homefinder.domain.repository.DataStoreOperations
 import ca.josue.homefinder.domain.usecases.UseCases
-import ca.josue.homefinder.domain.usecases.read_access_token.ReadAccessTokenUseCase
+import ca.josue.homefinder.network.AuthInterceptor
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -32,39 +29,25 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    @OptIn(DelicateCoroutinesApi::class)
     @Provides
     @Singleton
-    fun provideHttpClient(
-        readAccessTokenUseCase: ReadAccessTokenUseCase,
-        dispatchers: CoroutineDispatcher
-    ) : OkHttpClient {
+    fun provideAuthInterceptor(dataStoreOperations: DataStoreOperations): Interceptor {
+        return AuthInterceptor(dataStoreOperations)
+    }
 
-        var tokenAccess : String? = null
-
-        GlobalScope.launch(dispatchers) {
-             tokenAccess = readAccessTokenUseCase()
-                .stateIn(this)
-                .value
-        }
-
-        val interceptor = okhttp3.Interceptor { chain ->
-            val request = chain.request().newBuilder()
-                .addHeader("Authorization", "Bearer $tokenAccess")
-                .build()
-            chain.proceed(request)
-        }
-
+    @Provides
+    @Singleton
+    fun provideHttpClient(authInterceptor: Interceptor): OkHttpClient {
         return OkHttpClient.Builder()
-            .readTimeout(15, TimeUnit.SECONDS)
-            .connectTimeout(15, TimeUnit.SECONDS)
-            .addInterceptor(interceptor)
+            .readTimeout(20, TimeUnit.SECONDS)
+            .connectTimeout(20, TimeUnit.SECONDS)
+            .addInterceptor(authInterceptor)
             .build()
     }
 
     @Provides
     @Singleton
-    fun provideRetrofitInstance(okHttpClient : OkHttpClient) : Retrofit {
+    fun provideRetrofitInstance(okHttpClient: OkHttpClient): Retrofit {
         val gson = Gson()
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
@@ -75,36 +58,34 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideHouseService(retrofit: Retrofit) : HouseService {
+    fun provideHouseService(retrofit: Retrofit): HouseService {
         return retrofit.create(HouseService::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideAuthenticationService(retrofit: Retrofit) : AuthenticationService {
+    fun provideAuthenticationService(retrofit: Retrofit): AuthenticationService {
         return retrofit.create(AuthenticationService::class.java)
     }
 
     @Provides
     @Singleton
     fun provideRemoteDataSource(
-        houseService : HouseService,
+        houseService: HouseService,
         database: HomeFinderDB,
-        readAccessTokenUseCase: ReadAccessTokenUseCase
-    ) : HouseRemoteDataSource {
+    ): HouseRemoteDataSource {
         return HouseRemoteDataSourceImpl(
             service = houseService,
             database = database,
-            readAccessTokenUseCase = readAccessTokenUseCase
         )
     }
 
     @Provides
     @Singleton
     fun provideAuthenticationRemoteDataSource(
-        authenticationService : AuthenticationService,
+        authenticationService: AuthenticationService,
         useCases: UseCases
-    ) : AuthenticationRemoteDataSource {
+    ): AuthenticationRemoteDataSource {
         return AuthenticationRemoteDataSourceImpl(
             service = authenticationService,
             useCases = useCases
@@ -113,5 +94,5 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideDispatcher() : CoroutineDispatcher = Dispatchers.IO
+    fun provideDispatcher(): CoroutineDispatcher = Dispatchers.IO
 }

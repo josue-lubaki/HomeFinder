@@ -14,17 +14,21 @@ import javax.inject.Inject
  */
 
 class AuthenticationRemoteDataSourceImpl @Inject constructor(
-    private val service : AuthenticationService,
+    private val service: AuthenticationService,
     private val useCases: UseCases
 ) : AuthenticationRemoteDataSource {
     override suspend fun login(request: Authentication): AuthenticationStatus {
         val response = service.login(request)
-        return if (response.isSuccessful) {
-            val token = response.body()!!.token
-            useCases.saveAccessTokenUseCase(token)
-            AuthenticationStatus.Success
-        } else {
-            AuthenticationStatus.Error(Exception(response.message()))
+        return try {
+            if (response.isSuccessful) {
+                val token = response.body()!!.token
+                useCases.saveAccessTokenUseCase(token)
+                AuthenticationStatus.Success
+            } else {
+                AuthenticationStatus.Error(Exception(response.message()))
+            }
+        } catch (e: Exception) {
+            AuthenticationStatus.Error(e)
         }
     }
 }

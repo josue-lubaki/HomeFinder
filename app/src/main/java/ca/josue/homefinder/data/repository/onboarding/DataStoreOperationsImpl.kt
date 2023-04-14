@@ -14,7 +14,9 @@ import ca.josue.homefinder.utils.Constants.PREFERENCES_NAME
 import ca.josue.homefinder.utils.Constants.TOKEN_ACCESS_KEY
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 import java.io.IOException
 
 val Context.dataStore : DataStore<Preferences> by preferencesDataStore(name = PREFERENCES_NAME)
@@ -47,15 +49,17 @@ class DataStoreOperationsImpl(context : Context) : DataStoreOperations {
         }
     }
 
-    override fun readTokenAccess(): Flow<String> {
-        return dataStore.data.catch { exception ->
-            if(exception is IOException){
-                emit(emptyPreferences())
-            } else {
-                throw exception
-            }
-        }.map { preferencesArray ->
-            preferencesArray[PreferencesKeys.tokenAccessKey] ?: ""
+    override fun readTokenAccess(): String {
+        return runBlocking {
+            dataStore.data.catch { exception ->
+                if (exception is IOException) {
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }.map { preferencesArray ->
+                preferencesArray[PreferencesKeys.tokenAccessKey] ?: ""
+            }.first()
         }
     }
 

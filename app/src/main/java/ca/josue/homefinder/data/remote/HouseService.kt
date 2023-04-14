@@ -1,8 +1,8 @@
 package ca.josue.homefinder.data.remote
 
 import ca.josue.homefinder.data.models.house.ApiResponseHouse
+import ca.josue.homefinder.utils.Endpoints
 import retrofit2.http.GET
-import retrofit2.http.HeaderMap
 import retrofit2.http.Query
 
 /**
@@ -13,9 +13,8 @@ import retrofit2.http.Query
 
 interface HouseService {
 
-    @GET("/api/v1/houses")
+    @GET(Endpoints.HOUSES_LIST)
     suspend fun getAllHouses(
-        @Query("page") page : Int = 1,
-        @HeaderMap headers: Map<String, String>
+        @Query("page") page: Int = 1
     ): ApiResponseHouse
 }
