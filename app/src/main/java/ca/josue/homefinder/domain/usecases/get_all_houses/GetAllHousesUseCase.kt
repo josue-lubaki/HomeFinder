@@ -1,9 +1,7 @@
 package ca.josue.homefinder.domain.usecases.get_all_houses
 
-import androidx.paging.PagingData
 import ca.josue.homefinder.data.repository.Repository
-import ca.josue.homefinder.domain.models.House
-import kotlinx.coroutines.flow.Flow
+import ca.josue.homefinder.domain.models.HouseStatus
 
 /**
  * created by Josue Lubaki
@@ -14,5 +12,5 @@ import kotlinx.coroutines.flow.Flow
 class GetAllHousesUseCase(
     private val repository: Repository
 ) {
-    operator fun invoke() : Flow<PagingData<House>> = repository.getAllHouses()
+    operator fun invoke(): HouseStatus = repository.getAllHouses()
 }

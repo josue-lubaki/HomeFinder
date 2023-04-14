@@ -37,7 +37,14 @@ fun SetupNavGraph(
         authNavigationGraph(
             navController = navController,
             windowSize = windowSize,
-            loginViewModel = loginViewModel
+            loginViewModel = loginViewModel,
+            onNavigateToRegister = {
+                navController.navigate(Screen.Register.route)
+            },
+            onNavigateToHome = {
+                navController.popBackStack()
+                navController.navigate(Graph.MAIN)
+            }
         )
 
         mainNavigation(

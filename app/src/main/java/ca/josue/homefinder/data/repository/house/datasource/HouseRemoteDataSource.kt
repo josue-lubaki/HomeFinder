@@ -1,8 +1,6 @@
 package ca.josue.homefinder.data.repository.house.datasource
 
-import androidx.paging.PagingData
-import ca.josue.homefinder.domain.models.House
-import kotlinx.coroutines.flow.Flow
+import ca.josue.homefinder.domain.models.HouseStatus
 
 /**
  * created by Josue Lubaki
@@ -11,5 +9,5 @@ import kotlinx.coroutines.flow.Flow
  */
 
 interface HouseRemoteDataSource {
-    fun getAllHouses(): Flow<PagingData<House>>
+    fun getAllHouses(): HouseStatus
 }
