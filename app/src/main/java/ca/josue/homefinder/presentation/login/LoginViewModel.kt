@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import ca.josue.homefinder.domain.models.Authentication
 import ca.josue.homefinder.domain.models.AuthenticationStatus.Error
 import ca.josue.homefinder.domain.models.AuthenticationStatus.Success
-import ca.josue.homefinder.domain.usecases.UseCases
 import ca.josue.homefinder.domain.usecases.login_user.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -28,7 +27,7 @@ class LoginViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<LoginState>(LoginState.Idle)
-    val state : StateFlow<LoginState> = _state.asStateFlow()
+    val state: StateFlow<LoginState> = _state.asStateFlow()
 
     private sealed class LoginAction {
         data class Login(val request: Authentication) : LoginAction()
@@ -62,8 +61,8 @@ class LoginViewModel @Inject constructor(
         _state.value = LoginState.Error(error)
     }
 
-    fun onLogin(login : String, password : String) {
-        val request = Authentication(login, password)
+    fun onLogin(username: String, password: String) {
+        val request = Authentication(username, password)
         dispatchAction(LoginAction.Login(request))
     }
 }
