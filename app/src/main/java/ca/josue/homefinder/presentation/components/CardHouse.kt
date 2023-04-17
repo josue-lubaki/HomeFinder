@@ -25,6 +25,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -65,7 +66,12 @@ import java.text.NumberFormat
 fun CardHouse(
     house: House,
     isLiked: Boolean = false,
+    windowSize: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
 ) {
+
+    val isLarge = windowSize == WindowWidthSizeClass.Expanded
+    val imageSize = if (isLarge) 265.dp else MaterialTheme.dimensions.imageHeightDefault
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -116,6 +122,7 @@ fun CardHouse(
         when (painter.state) {
             is AsyncImagePainter.State.Success -> {
                 Image(
+                    modifier = Modifier.height(imageSize),
                     painter = painter,
                     contentDescription = "Profile Picture",
                     contentScale = ContentScale.Crop,
@@ -127,7 +134,7 @@ fun CardHouse(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(gradient)
-                        .height(MaterialTheme.dimensions.imageHeightDefault),
+                        .height(imageSize),
                     color = Color.LightGray.copy(alpha = 0.5f),
                     shape = RoundedCornerShape(
                         topStart = MaterialTheme.dimensions.semiMedium,
@@ -138,6 +145,7 @@ fun CardHouse(
 
             else -> {
                 Image(
+                    modifier = Modifier.height(imageSize),
                     painter = painterResource(id = R.drawable.placeholder),
                     contentDescription = "Profile Picture",
                     contentScale = ContentScale.Crop,
@@ -283,6 +291,7 @@ private fun CardHousePreview() {
                 .padding(MaterialTheme.dimensions.small),
         ) {
             CardHouse(
+                windowSize = WindowWidthSizeClass.Expanded,
                 isLiked = true,
                 house = House(
                     id = "1",

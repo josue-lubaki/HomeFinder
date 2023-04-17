@@ -92,7 +92,7 @@ fun PagerScreen(onBoardingPage: OnBoardingPage) {
         verticalArrangement = Arrangement.Top
     ) {
         Image(
-            modifier = Modifier.fillMaxHeight(0.7f),
+            modifier = Modifier.fillMaxHeight(0.65f),
             painter = painterResource(id = onBoardingPage.image),
             contentDescription = stringResource(R.string.onBoarding_image)
         )
