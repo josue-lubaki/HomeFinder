@@ -1,6 +1,7 @@
 package ca.josue.homefinder.navigation
 
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -28,6 +29,7 @@ fun NavGraphBuilder.mainNavigation(
         composable(Screen.Home.route) {
             HomeScreenRoute(
                 windowSize = windowSize,
+                viewModel = hiltViewModel(),
             )
         }
 
