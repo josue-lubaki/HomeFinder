@@ -20,4 +20,7 @@
     <string name="menu_home">Accueil</string>
     <string name="menu_search">Recherche</string>
     <string name="menu_profile">Profil</string>
+    <string name="houses_found">%1$s propriétés</string>
+    <string name="house_found">1 propriété</string>
+    <string name="no_house_found">Aucune propriété trouvé</string>
 </resources>
