@@ -97,7 +97,8 @@ data class Dimensions(
     val borderWithLarge : Dp = 7.dp,
     val borderWithExtraLarge : Dp = 8.dp,
 
-    val imageHeightDefault : Dp = 440.dp
+    val imageHeightDefault : Dp = 440.dp,
+    val imageHeightSmall : Dp = 280.dp
 )
 
 val LocalDimension = compositionLocalOf { Dimensions() }

@@ -8,6 +8,7 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -70,7 +71,9 @@ fun CardHouse(
 ) {
 
     val isLarge = windowSize == WindowWidthSizeClass.Expanded
-    val imageSize = if (isLarge) 265.dp else MaterialTheme.dimensions.imageHeightDefault
+    val imageSize =
+        if (isLarge) MaterialTheme.dimensions.imageHeightSmall
+        else MaterialTheme.dimensions.imageHeightDefault
 
     Column(
         modifier = Modifier
@@ -81,7 +84,8 @@ fun CardHouse(
                     topStart = MaterialTheme.dimensions.semiMedium,
                     topEnd = MaterialTheme.dimensions.semiMedium,
                 )
-            ),
+            )
+            .clickable { /*TODO*/ },
         verticalArrangement = Arrangement.Top
     ) {
 
