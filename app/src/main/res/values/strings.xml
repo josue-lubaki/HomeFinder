@@ -22,4 +22,5 @@
     <string name="houses_found">%1$s properties</string>
     <string name="house_found">1 propertie</string>
     <string name="no_house_found">No properties found</string>
+    <string name="hello">Hello</string>
 </resources>

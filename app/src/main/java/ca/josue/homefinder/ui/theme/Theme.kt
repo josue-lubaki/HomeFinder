@@ -16,32 +16,62 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = primaryDark10,
+    onPrimary = primaryDark100,
+    primaryContainer = primaryDark80,
+    onPrimaryContainer = primaryDark10,
+    secondary = secondaryDark50,
+    onSecondary = secondaryDark100,
+    secondaryContainer = secondaryDark80,
+    onSecondaryContainer = secondaryDark10,
+    tertiary = tertiaryDark50,
+    onTertiary = tertiaryDark100,
+    tertiaryContainer = tertiaryDark80,
+    onTertiaryContainer = tertiaryDark10,
+    error = errorDark50,
+    onError = errorDark100,
+    errorContainer = errorDark80,
+    onErrorContainer = errorDark10,
+    background = backgroundDark,
+    onBackground = onBackgroundDark,
+    surface = surfaceDark,
+    onSurface = onSurfaceDark,
+    surfaceVariant = surfaceVariantDark,
+    onSurfaceVariant = onSurfaceVariantDark,
+    outline = outlineDark,
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    primary = primary10,
+    onPrimary = primary100,
+    primaryContainer = primary80,
+    onPrimaryContainer = primary10,
+    secondary = secondary50,
+    onSecondary = secondary100,
+    secondaryContainer = secondary80,
+    onSecondaryContainer = secondary10,
+    tertiary = tertiary50,
+    onTertiary = tertiary100,
+    tertiaryContainer = tertiary80,
+    onTertiaryContainer = tertiary10,
+    error = error50,
+    onError = error100,
+    errorContainer = error80,
+    onErrorContainer = error10,
+    background = background,
+    onBackground = onBackground,
+    surface = surface,
+    onSurface = onSurface,
+    surfaceVariant = surfaceVariant,
+    onSurfaceVariant = onSurfaceVariant,
+    outline = outline,
 )
 
 @Composable
 fun HomeFinderTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -57,8 +87,8 @@ fun HomeFinderTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+            window.statusBarColor = colorScheme.background.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
 

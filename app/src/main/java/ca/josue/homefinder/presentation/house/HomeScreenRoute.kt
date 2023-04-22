@@ -1,6 +1,5 @@
 package ca.josue.homefinder.presentation.house
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,7 +22,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -137,20 +135,16 @@ fun SmallHomeScreen(
 
 @Composable
 fun HeadCard(number: Int) {
-    Box(
-        modifier = Modifier
-            .background(color = Color.Green.copy(alpha = 0.1f))
-            .fillMaxWidth()
-    ) {
+    Box(modifier = Modifier.fillMaxWidth()) {
 
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ){
-
             Text(
-                text = "Hello",
-                style = MaterialTheme.typography.headlineSmall
+                text = stringResource(R.string.hello),
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Text(
@@ -160,9 +154,9 @@ fun HeadCard(number: Int) {
                     else -> stringResource(R.string.houses_found, number)
                 },
                 style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface
             )
-
         }
     }
 }

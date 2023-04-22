@@ -139,7 +139,7 @@ fun CardHouse(
                         .fillMaxWidth()
                         .background(gradient)
                         .height(imageSize),
-                    color = Color.LightGray.copy(alpha = 0.5f),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f),
                     shape = RoundedCornerShape(
                         topStart = MaterialTheme.dimensions.semiMedium,
                         topEnd = MaterialTheme.dimensions.semiMedium,
@@ -159,7 +159,7 @@ fun CardHouse(
 
         Column(
             modifier = Modifier
-                .background(Color.LightGray.copy(alpha = 0.3f))
+                .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
                 .padding(MaterialTheme.dimensions.small),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.tiny),
         ) {
@@ -178,7 +178,7 @@ fun CardHouse(
                     Icon(
                         imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                         contentDescription = "Favorite Icon",
-                        tint = if (isLiked) Color.Red else Color.Black,
+                        tint = if (isLiked) Color.Red else MaterialTheme.colorScheme.onSurface,
                     )
                 }
             }
@@ -192,7 +192,7 @@ fun CardHouse(
                     modifier = Modifier.height(MaterialTheme.typography.bodyLarge.fontSize.value.dp),
                     imageVector = Icons.Outlined.Place,
                     contentDescription = "Place Icon",
-                    tint = Color.Black,
+                    tint = MaterialTheme.colorScheme.onSecondaryContainer,
                 )
 
                 Text(
