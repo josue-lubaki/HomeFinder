@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -51,11 +50,12 @@ import ca.josue.homefinder.utils.Constants
 fun AppScreen(
     navController: NavHostController = rememberNavController(),
     windowSize: WindowWidthSizeClass,
-    homeViewModel: HomeViewModel = hiltViewModel()
+    homeViewModel: HomeViewModel
 ) {
 
     val menus = listOf(
         BottomMenu.Home,
+        BottomMenu.Profile,
     )
 
     Scaffold(
@@ -139,8 +139,8 @@ fun BottomBarNavigation(
     navController: NavHostController,
 ) {
     NavigationBar(
-        containerColor = MaterialTheme.colorScheme.surface,
-        tonalElevation = MaterialTheme.dimensions.tiny
+        containerColor = MaterialTheme.colorScheme.background,
+        tonalElevation = MaterialTheme.dimensions.default,
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
@@ -167,9 +167,9 @@ fun BottomBarNavigation(
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedTextColor = MaterialTheme.colorScheme.primary,
+                    selectedTextColor = MaterialTheme.colorScheme.onSecondaryContainer,
                     unselectedTextColor = MaterialTheme.colorScheme.onSurface,
-                    selectedIconColor = MaterialTheme.colorScheme.primary,
+                    selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
                     unselectedIconColor = MaterialTheme.colorScheme.onSurface,
                     indicatorColor = MaterialTheme.colorScheme.secondaryContainer,
                 )
@@ -210,9 +210,9 @@ fun NavigationRails(
                     }
                 },
                 colors = NavigationRailItemDefaults.colors(
-                    selectedTextColor = MaterialTheme.colorScheme.primary,
+                    selectedTextColor = MaterialTheme.colorScheme.onSurface,
                     unselectedTextColor = MaterialTheme.colorScheme.onSurface,
-                    selectedIconColor = MaterialTheme.colorScheme.primary,
+                    selectedIconColor = MaterialTheme.colorScheme.onSurface,
                     unselectedIconColor = MaterialTheme.colorScheme.onSurface,
                     indicatorColor = MaterialTheme.colorScheme.secondaryContainer,
                 )

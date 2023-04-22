@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import ca.josue.homefinder.presentation.AppScreen
+import ca.josue.homefinder.presentation.house.HomeViewModel
 import ca.josue.homefinder.presentation.login.LoginViewModel
 import ca.josue.homefinder.presentation.splash.SplashViewModel
 import ca.josue.homefinder.presentation.welcome.WelcomeViewModel
@@ -25,7 +26,8 @@ fun SetupNavGraph(
     windowSize: WindowWidthSizeClass,
     welcomeViewModel: WelcomeViewModel = hiltViewModel(),
     splashViewModel: SplashViewModel = hiltViewModel(),
-    loginViewModel: LoginViewModel = hiltViewModel()
+    loginViewModel: LoginViewModel = hiltViewModel(),
+    homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
     NavHost(
         navController = navController,
@@ -54,13 +56,8 @@ fun SetupNavGraph(
         composable(route = Graph.MAIN) {
             AppScreen(
                 windowSize = windowSize,
+                homeViewModel = homeViewModel,
             )
         }
-
-
-//        mainNavigation(
-//            navController = navController,
-//            windowSize = windowSize,
-//        )
     }
 }
