@@ -33,7 +33,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import ca.josue.homefinder.domain.models.BottomMenu
 import ca.josue.homefinder.navigation.Screen
-import ca.josue.homefinder.presentation.details.DetailsScreen
+import ca.josue.homefinder.presentation.details.DetailsScreenRoute
+import ca.josue.homefinder.presentation.details.DetailsViewModel
 import ca.josue.homefinder.presentation.house.HomeScreenRoute
 import ca.josue.homefinder.presentation.house.HomeViewModel
 import ca.josue.homefinder.ui.theme.dimensions
@@ -50,7 +51,8 @@ import ca.josue.homefinder.utils.Constants
 fun AppScreen(
     navController: NavHostController = rememberNavController(),
     windowSize: WindowWidthSizeClass,
-    homeViewModel: HomeViewModel
+    homeViewModel: HomeViewModel,
+    detailsViewModel: DetailsViewModel
 ) {
 
     val menus = listOf(
@@ -71,6 +73,7 @@ fun AppScreen(
                         navController = navController,
                         windowSize = windowSize,
                         homeViewModel = homeViewModel,
+                        detailsViewModel = detailsViewModel
                     )
                 }
             } else {
@@ -79,6 +82,7 @@ fun AppScreen(
                     padding = it,
                     windowSize = windowSize,
                     homeViewModel = homeViewModel,
+                    detailsViewModel = detailsViewModel
                 )
             }
         },
@@ -99,6 +103,7 @@ fun Content(
     navController: NavHostController,
     windowSize: WindowWidthSizeClass,
     homeViewModel: HomeViewModel,
+    detailsViewModel: DetailsViewModel
 ) {
     Box(
         modifier = Modifier
@@ -106,6 +111,11 @@ fun Content(
             .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center
     ) {
+
+        val onBackPressed = {
+            navController.popBackStack()
+        }
+
         NavHost(
             navController = navController,
             startDestination = Screen.Home.route
@@ -114,6 +124,9 @@ fun Content(
                 HomeScreenRoute(
                     windowSize = windowSize,
                     viewModel = homeViewModel,
+                    onHouseClicked = { houseUuid ->
+                        navController.navigate(Screen.Details.passHeroId(houseUuid))
+                    }
                 )
             }
 
@@ -124,9 +137,10 @@ fun Content(
                 })
             ) {
                 val houseUuid = it.arguments?.getInt(Constants.DETAILS_ARGUMENT_KEY) ?: -1
-                DetailsScreen(
+                DetailsScreenRoute(
                     houseUuid = houseUuid,
-                    windowSize = windowSize,
+                    viewModel = detailsViewModel,
+                    onBackPressed = onBackPressed
                 )
             }
         }

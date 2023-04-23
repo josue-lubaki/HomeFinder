@@ -48,7 +48,8 @@ import kotlinx.coroutines.flow.flowOf
 @Composable
 fun HomeScreenRoute(
     windowSize: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
-    viewModel: HomeViewModel
+    viewModel: HomeViewModel,
+    onHouseClicked: (Int) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val allHouses = remember { mutableStateOf<Flow<PagingData<House>>>(flowOf()) }
@@ -73,14 +74,23 @@ fun HomeScreenRoute(
     }
 
     if (windowSize == WindowWidthSizeClass.Expanded) {
-        LargeHomeScreen(list = allHouses.value.collectAsLazyPagingItems())
+        LargeHomeScreen(
+            list = allHouses.value.collectAsLazyPagingItems(),
+            onHouseClicked = onHouseClicked
+        )
     } else {
-        SmallHomeScreen(list = allHouses.value.collectAsLazyPagingItems())
+        SmallHomeScreen(
+            list = allHouses.value.collectAsLazyPagingItems(),
+            onHouseClicked = onHouseClicked
+        )
     }
 }
 
 @Composable
-fun LargeHomeScreen(list: LazyPagingItems<House>) {
+fun LargeHomeScreen(
+    list: LazyPagingItems<House>,
+    onHouseClicked: (Int) -> Unit
+) {
     val scrollState = rememberScrollState()
     val lazyGridState = rememberLazyGridState()
     Column {
@@ -99,7 +109,8 @@ fun LargeHomeScreen(list: LazyPagingItems<House>) {
                 CardHouse(
                     house = house,
                     isLiked = false,
-                    windowSize = WindowWidthSizeClass.Expanded
+                    windowSize = WindowWidthSizeClass.Expanded,
+                    onHouseClicked = onHouseClicked
                 )
             }
         }
@@ -109,6 +120,7 @@ fun LargeHomeScreen(list: LazyPagingItems<House>) {
 @Composable
 fun SmallHomeScreen(
     list: LazyPagingItems<House>,
+    onHouseClicked: (Int) -> Unit
 ) {
     val scrollState = rememberScrollState()
     Column(
@@ -126,6 +138,7 @@ fun SmallHomeScreen(
                     CardHouse(
                         house = house,
                         isLiked = false,
+                        onHouseClicked = onHouseClicked,
                     )
                 }
             }
@@ -174,6 +187,7 @@ private fun HeadPreview() {
 private fun HomeScreenPreview() {
     HomeFinderTheme {
         SmallHomeScreen(
+            onHouseClicked = {},
             list = flowOf(
                 PagingData.from(
                     listOf(

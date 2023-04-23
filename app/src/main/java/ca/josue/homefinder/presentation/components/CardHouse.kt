@@ -10,7 +10,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -51,11 +50,11 @@ import ca.josue.homefinder.domain.models.House
 import ca.josue.homefinder.domain.models.Owner
 import ca.josue.homefinder.ui.theme.HomeFinderTheme
 import ca.josue.homefinder.ui.theme.dimensions
+import ca.josue.homefinder.utils.Constants.getHomeTypeName
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
-import java.text.NumberFormat
 
 /**
  * created by Josue Lubaki
@@ -68,6 +67,7 @@ fun CardHouse(
     house: House,
     isLiked: Boolean = false,
     windowSize: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
+    onHouseClicked: (Int) -> Unit,
 ) {
 
     val isLarge = windowSize == WindowWidthSizeClass.Expanded
@@ -85,7 +85,7 @@ fun CardHouse(
                     topEnd = MaterialTheme.dimensions.semiMedium,
                 )
             )
-            .clickable { /*TODO*/ },
+            .clickable { onHouseClicked(house.uuid) },
         verticalArrangement = Arrangement.Top
     ) {
 
@@ -208,53 +208,7 @@ fun CardHouse(
                 style = MaterialTheme.typography.bodyMedium,
             )
 
-            Box(
-                modifier = Modifier
-                    .padding(vertical = MaterialTheme.dimensions.semiSmall)
-                    .background(
-                        color = Color.Green.copy(alpha = 0.4f),
-                        shape = RoundedCornerShape(MaterialTheme.dimensions.small)
-                    )
-                    .padding(
-                        horizontal = MaterialTheme.dimensions.small,
-                        vertical = MaterialTheme.dimensions.semiSmall
-                    ),
-                contentAlignment = Alignment.Center,
-            ) {
-                when (house.type) {
-                    HouseType.CONDO.name -> {
-                        Text(
-                            text = stringResource(R.string.condo),
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                    }
-
-                    HouseType.SINGLE_FAMILY.name -> {
-                        Text(
-                            text = stringResource(R.string.single_family),
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                    }
-
-                    HouseType.MULTIPLEX.name -> {
-                        Text(
-                            text = stringResource(R.string.multiplex),
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                    }
-
-                    HouseType.CHALET.name -> {
-                        Text(
-                            text = stringResource(R.string.chalet),
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                    }
-                }
-            }
+            Tag(text = stringResource(id = getHomeTypeName(house.type)))
 
             Text(
                 text = house.description,
@@ -268,20 +222,7 @@ fun CardHouse(
     }
 }
 
-@Composable
-fun FormattedPrice(price: Double) {
-    val formatter = NumberFormat.getInstance().apply {
-        minimumFractionDigits = 0
-        maximumFractionDigits = 0
-    }
-    val finalFormattedPrice = formatter.format(price)
 
-    Text(
-        text = "$finalFormattedPrice $",
-        style = MaterialTheme.typography.titleLarge,
-        fontWeight = FontWeight.SemiBold
-    )
-}
 
 @Preview
 @Composable
@@ -297,6 +238,7 @@ private fun CardHousePreview() {
             CardHouse(
                 windowSize = WindowWidthSizeClass.Expanded,
                 isLiked = true,
+                onHouseClicked = { /*TODO*/ },
                 house = House(
                     id = "1",
                     uuid = 1,

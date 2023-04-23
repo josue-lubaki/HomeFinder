@@ -9,6 +9,7 @@ import ca.josue.homefinder.domain.repository.AuthenticationRepository
 import ca.josue.homefinder.domain.repository.DataStoreOperations
 import ca.josue.homefinder.domain.usecases.UseCases
 import ca.josue.homefinder.domain.usecases.get_all_houses.GetAllHousesUseCase
+import ca.josue.homefinder.domain.usecases.get_house_details.GetHouseDetailsUseCase
 import ca.josue.homefinder.domain.usecases.read_onboarding.ReadOnBoardingUseCase
 import ca.josue.homefinder.domain.usecases.save_access_token.SaveAccessTokenUseCase
 import ca.josue.homefinder.domain.usecases.save_onboarding.SaveOnBoardingUseCase
@@ -40,6 +41,7 @@ object RepositoryModule {
     fun provideUseCases(repository: Repository): UseCases {
         return UseCases(
             getAllHousesUseCase = GetAllHousesUseCase(repository),
+            getHouseDetailsUseCase = GetHouseDetailsUseCase(repository),
             readOnBoardingUseCase = ReadOnBoardingUseCase(repository),
             saveOnBoardingUseCase = SaveOnBoardingUseCase(repository),
             saveAccessTokenUseCase = SaveAccessTokenUseCase(repository),

@@ -1,7 +1,7 @@
 package ca.josue.homefinder.domain.usecases.get_all_houses
 
 import ca.josue.homefinder.data.repository.Repository
-import ca.josue.homefinder.domain.models.HouseStatus
+import ca.josue.homefinder.domain.models.HouseRemoteStatus
 
 /**
  * created by Josue Lubaki
@@ -12,5 +12,5 @@ import ca.josue.homefinder.domain.models.HouseStatus
 class GetAllHousesUseCase(
     private val repository: Repository
 ) {
-    operator fun invoke(): HouseStatus = repository.getAllHouses()
+    operator fun invoke(): HouseRemoteStatus = repository.getAllHouses()
 }

@@ -2,8 +2,9 @@ package ca.josue.homefinder.data.repository.house.datasourceimpl
 
 import androidx.paging.PagingSource
 import ca.josue.homefinder.data.local.dao.house.HouseDao
-import ca.josue.homefinder.domain.models.House
 import ca.josue.homefinder.data.repository.house.datasource.HouseLocalDataSource
+import ca.josue.homefinder.domain.models.House
+import ca.josue.homefinder.domain.models.HouseLocalStatus
 
 /**
  * created by Josue Lubaki
@@ -18,8 +19,11 @@ class HouseLocalDataSourceImpl(
         return houseDao.getAllHouses()
     }
 
-    override suspend fun getHouseFromDB(id: String): House {
-        return houseDao.getHouseById(id)
+    override suspend fun getHouseFromDB(uuid: Int): HouseLocalStatus {
+        return when (val house = houseDao.getHouseById(uuid)) {
+            null -> HouseLocalStatus.Error(Exception("House not found"))
+            else -> HouseLocalStatus.Success(house)
+        }
     }
 
     override suspend fun saveHousesToDB(houses: List<House>) {

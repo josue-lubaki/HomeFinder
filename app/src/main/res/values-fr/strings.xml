@@ -24,4 +24,5 @@
     <string name="house_found">1 propriété</string>
     <string name="no_house_found">Aucune propriété trouvé</string>
     <string name="hello">Hello</string>
+    <string name="unknown_type">Non Défini</string>
 </resources>
