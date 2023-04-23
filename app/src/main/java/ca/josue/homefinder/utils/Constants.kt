@@ -15,10 +15,9 @@ object Constants {
     const val DETAILS_ARGUMENT_KEY = "houseId"
     const val MAX_SLEEP_TIME = 3500L
 
-    val MIN_SHEET_HEIGHT = 400.dp
+    val MIN_SHEET_HEIGHT = 300.dp
     val EXTRA_LARGE_PADDING = 40.dp
     val EXPANDED_RADIUS_LEVEL= 0.dp
-    const val MIN_BACKGROUND_IMAGE_HEIGHT = 0.4f
 
     // headers
     const val HEADER_AUTHORIZATION = "Authorization"

@@ -2,9 +2,12 @@ package ca.josue.homefinder.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -88,10 +91,17 @@ fun AppScreen(
         },
         bottomBar = {
             if (windowSize != WindowWidthSizeClass.Expanded) {
-                BottomBarNavigation(
-                    navController = navController,
-                    menus = menus,
-                )
+                Column {
+                    Divider(
+                        modifier = Modifier.fillMaxWidth(),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        thickness = 1.dp
+                    )
+                    BottomBarNavigation(
+                        navController = navController,
+                        menus = menus,
+                    )
+                }
             }
         },
     )

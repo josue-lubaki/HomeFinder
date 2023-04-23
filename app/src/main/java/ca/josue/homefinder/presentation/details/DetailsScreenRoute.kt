@@ -20,6 +20,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +36,7 @@ import ca.josue.homefinder.ui.theme.dimensions
 import ca.josue.homefinder.utils.Constants.EXPANDED_RADIUS_LEVEL
 import ca.josue.homefinder.utils.Constants.EXTRA_LARGE_PADDING
 import ca.josue.homefinder.utils.Constants.MIN_SHEET_HEIGHT
+import kotlinx.coroutines.launch
 
 /**
  * created by Josue Lubaki
@@ -77,15 +79,26 @@ fun DetailsScreen(
     onBackPressed: () -> Boolean
 ) {
 
+    val scope = rememberCoroutineScope()
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberBottomSheetState(
             initialValue = BottomSheetValue.Collapsed,
             animationSpec = spring(
                 dampingRatio = Spring.DampingRatioNoBouncy,
-                stiffness = Spring.StiffnessHigh
+                stiffness = Spring.StiffnessMediumLow
             )
         )
     )
+
+    val onToggleBottomSheetState = {
+        scope.launch {
+            if (scaffoldState.bottomSheetState.isCollapsed) {
+                scaffoldState.bottomSheetState.expand()
+            } else {
+                scaffoldState.bottomSheetState.collapse()
+            }
+        }
+    }
 
     val radiusAnim by animateDpAsState(
         targetValue =
@@ -106,12 +119,16 @@ fun DetailsScreen(
             Column(
                 Modifier
                     .fillMaxWidth()
-                    .fillMaxSize(.75f)
-                    .padding(MaterialTheme.dimensions.medium),
+                    .fillMaxSize(.8f)
+                    .padding(horizontal = MaterialTheme.dimensions.medium),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 selectedHouse?.let {
-                    BottomSheetContent(selectedHouse = it)
+                    BottomSheetContent(
+                        scaffoldState = scaffoldState,
+                        selectedHouse = it,
+                        onToggleBottomSheetState = onToggleBottomSheetState
+                    )
                 }
             }
         }) { innerPadding ->
@@ -126,7 +143,6 @@ fun DetailsScreen(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true)
 @Composable
 private fun DetailsScreenPreview() {
