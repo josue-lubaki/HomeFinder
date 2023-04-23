@@ -53,7 +53,6 @@ fun BackgroundContent(
         Image(
             modifier = Modifier
                 .fillMaxWidth()
-//                .fillMaxHeight(fraction = imageFraction + MIN_BACKGROUND_IMAGE_HEIGHT)
                 .fillMaxHeight(fraction = imageFraction)
                 .align(Alignment.TopStart),
             painter = painter,

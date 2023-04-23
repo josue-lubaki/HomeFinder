@@ -1,6 +1,8 @@
 package ca.josue.homefinder.presentation.components
 
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,14 +11,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.BottomSheetScaffoldState
+import androidx.compose.material.BottomSheetValue
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.rememberBottomSheetScaffoldState
+import androidx.compose.material.rememberBottomSheetState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,6 +42,8 @@ import ca.josue.homefinder.domain.models.House
 import ca.josue.homefinder.domain.models.Owner
 import ca.josue.homefinder.ui.theme.dimensions
 import ca.josue.homefinder.utils.Constants
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 /**
  * created by Josue Lubaki
@@ -38,49 +51,94 @@ import ca.josue.homefinder.utils.Constants
  * version : 1.0.0
  */
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BottomSheetContent(
-    selectedHouse : House
+    scaffoldState: BottomSheetScaffoldState,
+    selectedHouse : House,
+    onToggleBottomSheetState : () -> Job,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(MaterialTheme.dimensions.medium),
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.small),
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.padding(
+                top = MaterialTheme.dimensions.medium,
+                bottom = MaterialTheme.dimensions.medium
+            ),
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-
-            FormattedPrice(price = selectedHouse.price.toDouble())
-
-            IconButton(
-                modifier = Modifier.height(MaterialTheme.dimensions.semiExtraLarge),
-                onClick = { /*TODO*/ },
-            ) {
+        ){
+            IconButton(onClick = {
+                onToggleBottomSheetState()
+            }) {
                 Icon(
-                    imageVector = if (selectedHouse.isLiked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                    contentDescription = "Favorite Icon",
-                    tint = if (selectedHouse.isLiked) Color.Red else MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.size(36.dp),
+                    imageVector =
+                        if(scaffoldState.bottomSheetState.isCollapsed) Icons.Filled.KeyboardArrowUp
+                        else Icons.Filled.KeyboardArrowDown,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onBackground,
                 )
             }
         }
-        Tag(text = stringResource(id = Constants.getHomeTypeName(selectedHouse.type)))
-        Text(
-            text = selectedHouse.description,
-            style = MaterialTheme.typography.bodySmall,
-            fontWeight = FontWeight.Normal,
-            textAlign = TextAlign.Justify,
-        )
+
+        Column(
+            modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.small),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.small),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+
+                FormattedPrice(
+                    price = selectedHouse.price.toDouble(),
+                    fontWeight = FontWeight.ExtraBold,
+                )
+
+                IconButton(
+                    modifier = Modifier.height(MaterialTheme.dimensions.semiExtraLarge),
+                    onClick = { /*TODO*/ },
+                ) {
+                    Icon(
+                        imageVector = if (selectedHouse.isLiked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                        contentDescription = "Favorite Icon",
+                        tint = if (selectedHouse.isLiked) Color.Red else MaterialTheme.colorScheme.onSurface,
+                    )
+                }
+            }
+            Tag(text = stringResource(id = Constants.getHomeTypeName(selectedHouse.type)))
+            Text(
+                text = selectedHouse.description,
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.Normal,
+                textAlign = TextAlign.Justify,
+            )
+        }
     }
 
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true)
 @Composable
 private fun BottomSheetContentPreview() {
+    val scaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = rememberBottomSheetState(
+            initialValue = BottomSheetValue.Collapsed,
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioNoBouncy,
+                stiffness = Spring.StiffnessHigh
+            )
+        )
+    )
+
+    val scope = rememberCoroutineScope()
+
     Column(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.surface)
@@ -118,7 +176,13 @@ private fun BottomSheetContentPreview() {
                     email = "josuelubaki@gmail.com",
                     phone = "819-123-4567",
                 ),
-            )
+            ),
+            scaffoldState = scaffoldState,
+            onToggleBottomSheetState = {
+                scope.launch {
+                    scaffoldState.bottomSheetState.expand()
+                }
+            },
         )
     }
 }

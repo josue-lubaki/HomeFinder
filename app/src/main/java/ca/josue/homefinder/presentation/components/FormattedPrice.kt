@@ -19,6 +19,7 @@ import java.text.NumberFormat
 fun FormattedPrice(
     price: Double,
     style: TextStyle = MaterialTheme.typography.titleLarge,
+    fontWeight: FontWeight = FontWeight.SemiBold
 ) {
     val formatter = NumberFormat.getInstance().apply {
         minimumFractionDigits = 0
@@ -29,7 +30,7 @@ fun FormattedPrice(
     Text(
         text = "$finalFormattedPrice $",
         style = style,
-        fontWeight = FontWeight.SemiBold
+        fontWeight = fontWeight
     )
 }
 @Preview(showBackground = true)

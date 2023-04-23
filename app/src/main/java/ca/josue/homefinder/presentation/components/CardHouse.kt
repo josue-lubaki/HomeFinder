@@ -150,7 +150,7 @@ fun CardHouse(
             else -> {
                 Image(
                     modifier = Modifier.height(imageSize),
-                    painter = painterResource(id = R.drawable.placeholder),
+                    painter = painterResource(id = R.drawable.ic_placeholder),
                     contentDescription = "Profile Picture",
                     contentScale = ContentScale.Crop,
                 )
@@ -212,7 +212,7 @@ fun CardHouse(
 
             Text(
                 text = house.description,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.Normal,
                 textAlign = TextAlign.Justify,
                 maxLines = 2,

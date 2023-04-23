@@ -156,7 +156,7 @@ fun HeadCard(number: Int) {
         ){
             Text(
                 text = stringResource(R.string.hello),
-                style = MaterialTheme.typography.headlineSmall,
+                style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface
             )
 
