@@ -1,6 +1,6 @@
 package ca.josue.homefinder.data.repository.house.datasource
 
-import ca.josue.homefinder.domain.models.HouseStatus
+import ca.josue.homefinder.domain.models.HouseRemoteStatus
 
 /**
  * created by Josue Lubaki
@@ -9,5 +9,5 @@ import ca.josue.homefinder.domain.models.HouseStatus
  */
 
 interface HouseRemoteDataSource {
-    fun getAllHouses(): HouseStatus
+    fun getAllHouses(): HouseRemoteStatus
 }

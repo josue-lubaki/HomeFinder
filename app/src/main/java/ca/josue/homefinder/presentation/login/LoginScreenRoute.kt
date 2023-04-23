@@ -18,11 +18,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
-import androidx.compose.material.ScaffoldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowCircleRight
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -56,7 +53,6 @@ import ca.josue.homefinder.R
 import ca.josue.homefinder.presentation.components.CircularProgressBar
 import ca.josue.homefinder.ui.theme.HomeFinderTheme
 import ca.josue.homefinder.ui.theme.dimensions
-import timber.log.Timber
 
 /**
  * created by Josue Lubaki

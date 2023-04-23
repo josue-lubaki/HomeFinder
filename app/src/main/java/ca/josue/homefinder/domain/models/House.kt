@@ -1,7 +1,6 @@
 package ca.josue.homefinder.domain.models
 
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import kotlinx.serialization.Serializable
 
@@ -21,5 +20,6 @@ data class House(
     val type: String,
     val yearBuilt: Int,
     val pool: Boolean,
-    val owner: Owner
+    val owner: Owner,
+    val isLiked: Boolean = false,
 )

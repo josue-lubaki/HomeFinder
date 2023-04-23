@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import ca.josue.homefinder.domain.models.House
-import ca.josue.homefinder.domain.models.HouseStatus
+import ca.josue.homefinder.domain.models.HouseRemoteStatus
 import ca.josue.homefinder.domain.usecases.UseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -42,11 +42,11 @@ class HomeViewModel @Inject constructor(
                 _state.value = HomeState.Loading
                 viewModelScope.launch(dispatchers) {
                     when (val result = useCase.getAllHousesUseCase()) {
-                        is HouseStatus.Success -> {
-                            dispatch(HomeAction.GetAllHousesSuccess(result.houses))
+                        is HouseRemoteStatus.Success -> {
+                            dispatch(HomeAction.GetAllHousesSuccess(result.data))
                         }
 
-                        is HouseStatus.Error -> {
+                        is HouseRemoteStatus.Error -> {
                             dispatch(HomeAction.GetAllHousesError(result.exception))
                         }
                     }

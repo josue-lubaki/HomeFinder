@@ -7,7 +7,7 @@ import ca.josue.homefinder.data.local.db.HomeFinderDB
 import ca.josue.homefinder.data.paging_source.HouseRemoteMediator
 import ca.josue.homefinder.data.remote.HouseService
 import ca.josue.homefinder.data.repository.house.datasource.HouseRemoteDataSource
-import ca.josue.homefinder.domain.models.HouseStatus
+import ca.josue.homefinder.domain.models.HouseRemoteStatus
 import ca.josue.homefinder.utils.Constants.ITEMS_PER_PAGE
 
 /**
@@ -23,10 +23,10 @@ class HouseRemoteDataSourceImpl(
 ) : HouseRemoteDataSource {
 
     private val houseDao = database.houseDao()
-    override fun getAllHouses(): HouseStatus {
+    override fun getAllHouses(): HouseRemoteStatus {
         val pagingSourceFactory = { houseDao.getAllHouses() }
         return try {
-            HouseStatus.Success(
+            HouseRemoteStatus.Success(
                 Pager(
                     config = PagingConfig(
                         pageSize = ITEMS_PER_PAGE,
@@ -39,7 +39,7 @@ class HouseRemoteDataSourceImpl(
                 ).flow
             )
         } catch (e: Exception) {
-            HouseStatus.Error(e)
+            HouseRemoteStatus.Error(e)
         }
     }
 }

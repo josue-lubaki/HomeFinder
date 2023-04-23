@@ -28,7 +28,7 @@ interface HouseDao {
     @Query("SELECT * FROM houses_table ORDER BY uuid DESC")
     fun getAllHouses(): PagingSource<Int, House>
 
-    @Query("SELECT * FROM houses_table WHERE id = :id")
-    suspend fun getHouseById(id: String): House
+    @Query("SELECT * FROM houses_table WHERE uuid = :uuid")
+    suspend fun getHouseById(uuid: Int): House?
 
 }

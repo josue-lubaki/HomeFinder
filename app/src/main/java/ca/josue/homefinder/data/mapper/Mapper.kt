@@ -23,7 +23,7 @@ fun DataHouse.toDomain() : House {
         type = type,
         yearBuilt = yearBuilt,
         pool = pool,
-        owner = owner
+        owner = owner,
     )
 }
 
