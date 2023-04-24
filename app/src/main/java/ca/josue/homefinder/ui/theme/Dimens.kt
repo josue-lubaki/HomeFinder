@@ -30,6 +30,7 @@ data class Dimensions(
     val xLarge: Dp = 64.dp,
     val semiXXLarge : Dp = 80.dp,
     val xxLarge : Dp = 96.dp,
+    val xxxLarge : Dp = 110.dp,
 
     val paddingDefault : Dp = 0.dp,
     val paddingTiny : Dp = 4.dp,
