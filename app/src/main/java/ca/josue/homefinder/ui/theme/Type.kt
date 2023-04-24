@@ -72,7 +72,7 @@ val Typography = Typography(
     labelMedium = TextStyle(
         fontFamily = fonts,
         fontWeight = FontWeight(500),
-        fontSize = 14.sp,
+        fontSize = 13.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp,
     ),

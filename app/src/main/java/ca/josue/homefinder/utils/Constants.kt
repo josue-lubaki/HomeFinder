@@ -1,6 +1,12 @@
 package ca.josue.homefinder.utils
 
 import androidx.annotation.StringRes
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Apartment
+import androidx.compose.material.icons.outlined.Chalet
+import androidx.compose.material.icons.outlined.Domain
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import ca.josue.homefinder.R
 import ca.josue.homefinder.data.models.house.HouseType
@@ -31,6 +37,16 @@ object Constants {
             HouseType.MULTIPLEX.name -> R.string.multiplex
             HouseType.CHALET.name -> R.string.chalet
             else -> R.string.unknown_type
+        }
+    }
+
+    fun getHomeTypeIcon(type : String): ImageVector {
+        return when (type) {
+            HouseType.CONDO.name -> Icons.Outlined.Apartment
+            HouseType.SINGLE_FAMILY.name -> Icons.Outlined.Home
+            HouseType.MULTIPLEX.name -> Icons.Outlined.Domain
+            HouseType.CHALET.name -> Icons.Outlined.Chalet
+            else -> Icons.Outlined.Home
         }
     }
 }
