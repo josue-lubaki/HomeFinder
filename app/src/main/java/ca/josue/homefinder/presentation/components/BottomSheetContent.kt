@@ -6,6 +6,8 @@ import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,12 +16,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomSheetScaffoldState
 import androidx.compose.material.BottomSheetValue
+import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.outlined.Bed
+import androidx.compose.material.icons.outlined.Construction
+import androidx.compose.material.icons.outlined.Pool
+import androidx.compose.material.icons.outlined.Shower
+import androidx.compose.material.icons.outlined.SquareFoot
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material.rememberBottomSheetState
 import androidx.compose.material3.Icon
@@ -51,7 +59,7 @@ import kotlinx.coroutines.launch
  * version : 1.0.0
  */
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalLayoutApi::class)
 @Composable
 fun BottomSheetContent(
     scaffoldState: BottomSheetScaffoldState,
@@ -80,7 +88,7 @@ fun BottomSheetContent(
                         if(scaffoldState.bottomSheetState.isCollapsed) Icons.Filled.KeyboardArrowUp
                         else Icons.Filled.KeyboardArrowDown,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onBackground,
+                    tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                 )
             }
         }
@@ -119,8 +127,81 @@ fun BottomSheetContent(
                 textAlign = TextAlign.Justify,
             )
         }
-    }
 
+        Divider(
+            modifier = Modifier
+                .padding(
+                    horizontal = MaterialTheme.dimensions.small,
+                    vertical = MaterialTheme.dimensions.semiLarge
+                )
+                .fillMaxWidth()
+                .height(1.dp),
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f),
+        )
+
+        Column(){
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.small),
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.small),
+                maxItemsInEachRow = 3,
+            ) {
+
+                // Bedrooms
+                HouseItem(trailingIcon = Icons.Outlined.Bed) {
+                    Text(
+                        text = selectedHouse.bedrooms.toString(),
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.SemiBold,
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                // Area
+                HouseItem(trailingIcon = Icons.Outlined.SquareFoot
+                ) {
+                    Text(
+                        text = "${selectedHouse.area} pi²",
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.SemiBold,
+                        textAlign = TextAlign.Start
+                    )
+                }
+
+                // Bathrooms
+                HouseItem(trailingIcon = Icons.Outlined.Shower) {
+                    Text(
+                        text = selectedHouse.bathrooms.toString(),
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.SemiBold,
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                // pool
+                if(selectedHouse.pool) {
+                    HouseItem(trailingIcon = Icons.Outlined.Pool) {
+                        Text(
+                            text = "1",
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.SemiBold,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+
+                // yearBuilt
+                HouseItem(trailingIcon = Icons.Outlined.Construction) {
+                    Text(
+                        text = selectedHouse.yearBuilt.toString(),
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.SemiBold,
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
