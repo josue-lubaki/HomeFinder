@@ -14,6 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomSheetScaffoldState
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.Divider
@@ -30,6 +33,8 @@ import androidx.compose.material.icons.outlined.Shower
 import androidx.compose.material.icons.outlined.SquareFoot
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.material.rememberBottomSheetState
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -44,6 +49,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import ca.josue.homefinder.R
 import ca.josue.homefinder.data.models.house.HouseType
 import ca.josue.homefinder.domain.models.Address
 import ca.josue.homefinder.domain.models.House
@@ -65,9 +71,14 @@ fun BottomSheetContent(
     scaffoldState: BottomSheetScaffoldState,
     selectedHouse : House,
     onToggleBottomSheetState : () -> Job,
+    onViewOnMapClicked : () -> Unit,
 ) {
+    val scrollState = rememberScrollState()
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = MaterialTheme.dimensions.medium)
+            .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
@@ -83,7 +94,7 @@ fun BottomSheetContent(
                 onToggleBottomSheetState()
             }) {
                 Icon(
-                    modifier = Modifier.size(36.dp),
+                    modifier = Modifier.size(MaterialTheme.dimensions.semiExtraLarge),
                     imageVector =
                         if(scaffoldState.bottomSheetState.isCollapsed) Icons.Filled.KeyboardArrowUp
                         else Icons.Filled.KeyboardArrowDown,
@@ -119,88 +130,158 @@ fun BottomSheetContent(
                     )
                 }
             }
-            Tag(text = stringResource(id = Constants.getHomeTypeName(selectedHouse.type)))
-            Text(
-                text = selectedHouse.description,
-                style = MaterialTheme.typography.labelMedium,
-                fontWeight = FontWeight.Normal,
-                textAlign = TextAlign.Justify,
-            )
         }
 
         Divider(
             modifier = Modifier
                 .padding(
-                    horizontal = MaterialTheme.dimensions.small,
-                    vertical = MaterialTheme.dimensions.semiLarge
+                    vertical = MaterialTheme.dimensions.small
                 )
                 .fillMaxWidth()
                 .height(1.dp),
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f),
         )
 
-        Column(){
-            FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.small),
-                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.small),
-                maxItemsInEachRow = 3,
-            ) {
+        Column(
+            modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.small),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.semiMedium),
+        ) {
 
-                // Bedrooms
-                HouseItem(trailingIcon = Icons.Outlined.Bed) {
-                    Text(
-                        text = selectedHouse.bedrooms.toString(),
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.SemiBold,
-                        textAlign = TextAlign.Center
-                    )
-                }
+            Title(
+                modifier = Modifier
+                    .padding(top = MaterialTheme.dimensions.small),
+                text = stringResource(R.string.type_of_property)
+            )
 
-                // Area
-                HouseItem(trailingIcon = Icons.Outlined.SquareFoot
+            HouseItemColumn(
+                icon = Constants.getHomeTypeIcon(selectedHouse.type),
+                iconSize = MaterialTheme.dimensions.semiExtraLarge,
+            ){
+                Text(
+                    text = stringResource(id = Constants.getHomeTypeName(selectedHouse.type)),
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
+
+            Title(
+                modifier = Modifier
+                    .padding(top = MaterialTheme.dimensions.semiMedium),
+                text = stringResource(R.string.description)
+            )
+
+            Text(
+                text = selectedHouse.description,
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.Normal,
+                textAlign = TextAlign.Justify,
+            )
+
+            Title(
+                modifier = Modifier
+                    .padding(top = MaterialTheme.dimensions.semiMedium),
+                text = stringResource(R.string.details)
+            )
+
+            Column {
+
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.semiMedium),
+                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.semiMedium),
+                    maxItemsInEachRow = 3,
                 ) {
-                    Text(
-                        text = "${selectedHouse.area} pi²",
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.SemiBold,
-                        textAlign = TextAlign.Start
-                    )
-                }
 
-                // Bathrooms
-                HouseItem(trailingIcon = Icons.Outlined.Shower) {
-                    Text(
-                        text = selectedHouse.bathrooms.toString(),
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.SemiBold,
-                        textAlign = TextAlign.Center
-                    )
-                }
-
-                // pool
-                if(selectedHouse.pool) {
-                    HouseItem(trailingIcon = Icons.Outlined.Pool) {
+                    // Bedrooms
+                    HouseItemRow(trailingIcon = Icons.Outlined.Bed) {
                         Text(
-                            text = "1",
+                            text = selectedHouse.bedrooms.toString(),
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.SemiBold,
                             textAlign = TextAlign.Center
                         )
                     }
-                }
 
-                // yearBuilt
-                HouseItem(trailingIcon = Icons.Outlined.Construction) {
-                    Text(
-                        text = selectedHouse.yearBuilt.toString(),
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.SemiBold,
-                        textAlign = TextAlign.Center
-                    )
-                }
+                    // Area
+                    HouseItemRow(trailingIcon = Icons.Outlined.SquareFoot
+                    ) {
+                        Text(
+                            text = "${selectedHouse.area} pi²",
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.SemiBold,
+                            textAlign = TextAlign.Center
+                        )
+                    }
 
+                    // Bathrooms
+                    HouseItemRow(trailingIcon = Icons.Outlined.Shower) {
+                        Text(
+                            text = selectedHouse.bathrooms.toString(),
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.SemiBold,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
+                    // pool
+                    if(selectedHouse.pool) {
+                        HouseItemRow(trailingIcon = Icons.Outlined.Pool) {
+                            Text(
+                                text = "1",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.SemiBold,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+
+                    // yearBuilt
+                    HouseItemRow(trailingIcon = Icons.Outlined.Construction) {
+                        Text(
+                            text = selectedHouse.yearBuilt.toString(),
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.SemiBold,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
+                }
             }
         }
+
+        Divider(
+            modifier = Modifier
+                .padding(
+                    start = MaterialTheme.dimensions.small,
+                    end = MaterialTheme.dimensions.small,
+                    top = MaterialTheme.dimensions.semiLarge,
+                    bottom = MaterialTheme.dimensions.semiMedium
+                )
+                .fillMaxWidth()
+                .height(1.dp),
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f),
+        )
+
+        Column(
+            modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.small),
+        ) {
+
+            Button(
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.tertiary,
+                    contentColor = MaterialTheme.colorScheme.onTertiary,
+                ),
+                shape = RoundedCornerShape(MaterialTheme.dimensions.medium),
+                onClick = { onViewOnMapClicked() },
+            ) {
+                Text(
+                    text = stringResource(R.string.view_on_map),
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
+
     }
 }
 
@@ -264,6 +345,7 @@ private fun BottomSheetContentPreview() {
                     scaffoldState.bottomSheetState.expand()
                 }
             },
+            onViewOnMapClicked = {  }
         )
     }
 }

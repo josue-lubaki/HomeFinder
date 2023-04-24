@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.House
 import androidx.compose.material.icons.outlined.SquareFoot
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -23,6 +24,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import ca.josue.homefinder.ui.theme.HomeFinderTheme
 import ca.josue.homefinder.ui.theme.dimensions
@@ -34,7 +36,7 @@ import ca.josue.homefinder.ui.theme.dimensions
  */
 
 @Composable
-fun HouseItem(
+fun HouseItemRow(
     trailingIcon : ImageVector,
     content : @Composable () -> Unit,
 ) {
@@ -46,13 +48,12 @@ fun HouseItem(
                 shape = RoundedCornerShape(MaterialTheme.dimensions.small)
             )
             .requiredSizeIn(
-                minWidth = MaterialTheme.dimensions.xxLarge,
+                minWidth = MaterialTheme.dimensions.extraXLarge,
                 minHeight = MaterialTheme.dimensions.semiExtraLarge,
                 maxWidth = MaterialTheme.dimensions.xxxLarge,
                 maxHeight = MaterialTheme.dimensions.semiExtraLarge
             )
             .padding(horizontal = MaterialTheme.dimensions.semiMedium),
-//        contentAlignment = Alignment.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ){
@@ -63,32 +64,92 @@ fun HouseItem(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
         ){
-            Icon(
+            HouseItemContent(
                 modifier = Modifier
-                    .padding(end = MaterialTheme.dimensions.small)
-                    .size(24.dp)
-                ,
-                imageVector = trailingIcon,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface,
+                    .padding(end = MaterialTheme.dimensions.small),
+                icon = trailingIcon,
+                content = content,
             )
-
-            content()
         }
-
     }
+}
+
+@Composable
+fun HouseItemColumn(
+    icon : ImageVector,
+    iconSize : Dp = MaterialTheme.dimensions.semiExtraLarge,
+    content : @Composable () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .background(
+                color = Color.Green.copy(alpha = 0.4f),
+                shape = RoundedCornerShape(MaterialTheme.dimensions.small)
+            )
+            .requiredSizeIn(
+                minWidth = MaterialTheme.dimensions.xxLarge,
+                minHeight = MaterialTheme.dimensions.semiXXLarge,
+                maxWidth = MaterialTheme.dimensions.extraXXXLarge,
+                maxHeight = MaterialTheme.dimensions.xxxLarge
+            ),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        HouseItemContent(
+            icon = icon,
+            iconSize = iconSize,
+            content = content
+        )
+    }
+}
+
+@Composable
+fun HouseItemContent(
+    modifier: Modifier = Modifier,
+    icon : ImageVector,
+    iconSize : Dp = 24.dp,
+    content : @Composable () -> Unit,
+) {
+    Icon(
+        modifier = modifier
+            .size(iconSize),
+        imageVector = icon,
+        contentDescription = null,
+        tint = MaterialTheme.colorScheme.onSurface,
+    )
+
+    content()
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun HouseItemPreview() {
     HomeFinderTheme {
-        HouseItem(
+        HouseItemRow(
             trailingIcon = Icons.Outlined.SquareFoot,
             content = {
                 Text(
-                    text = "1",
+                    text = "965 pi²",
                     style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.SemiBold,
+                    textAlign = TextAlign.Center
+                )
+            }
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun HouseItemColumn() {
+    HomeFinderTheme {
+        HouseItemColumn(
+            icon = Icons.Outlined.House,
+            iconSize = MaterialTheme.dimensions.semiExtraLarge,
+            content = {
+                Text(
+                    text = "Single Family",
+                    style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.SemiBold,
                     textAlign = TextAlign.Center
                 )

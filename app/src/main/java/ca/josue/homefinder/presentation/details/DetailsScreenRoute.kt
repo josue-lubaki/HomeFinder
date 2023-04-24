@@ -1,5 +1,8 @@
 package ca.josue.homefinder.presentation.details
 
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
@@ -23,8 +26,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import ca.josue.homefinder.R
 import ca.josue.homefinder.data.models.house.HouseType
 import ca.josue.homefinder.domain.models.Address
 import ca.josue.homefinder.domain.models.House
@@ -50,6 +55,7 @@ fun DetailsScreenRoute(
     viewModel: DetailsViewModel,
     onBackPressed: () -> Boolean
 ) {
+    val context = LocalContext.current
 
     val state by viewModel.state.collectAsStateWithLifecycle()
     val house = remember { mutableStateOf<House?>(null) }
@@ -66,9 +72,20 @@ fun DetailsScreenRoute(
         }
     }
 
+    val onViewOnMapClicked = {
+        val address = selectedHouse?.address
+        if (address != null) {
+            val uri = Uri.parse("geo:0,0?q=${address.number}+${address.street},+${address.city},+${address.province},+${address.postalCode},+${address.country}")
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            context.startActivity(intent)
+        }
+        else Toast.makeText(context, R.string.no_address_found, Toast.LENGTH_LONG).show()
+    }
+
     DetailsScreen(
         selectedHouse = selectedHouse,
-        onBackPressed = onBackPressed
+        onBackPressed = onBackPressed,
+        onViewOnMapClicked = onViewOnMapClicked
     )
 }
 
@@ -76,7 +93,8 @@ fun DetailsScreenRoute(
 @Composable
 fun DetailsScreen(
     selectedHouse: House?,
-    onBackPressed: () -> Boolean
+    onBackPressed: () -> Boolean,
+    onViewOnMapClicked: () -> Unit
 ) {
 
     val scope = rememberCoroutineScope()
@@ -127,7 +145,8 @@ fun DetailsScreen(
                     BottomSheetContent(
                         scaffoldState = scaffoldState,
                         selectedHouse = it,
-                        onToggleBottomSheetState = onToggleBottomSheetState
+                        onToggleBottomSheetState = onToggleBottomSheetState,
+                        onViewOnMapClicked = onViewOnMapClicked
                     )
                 }
             }
@@ -179,7 +198,8 @@ private fun DetailsScreenPreview() {
                     phone = "819-123-4567",
                 ),
             ),
-            onBackPressed = { true }
+            onBackPressed = { true },
+            onViewOnMapClicked = { }
         )
     }
 }
