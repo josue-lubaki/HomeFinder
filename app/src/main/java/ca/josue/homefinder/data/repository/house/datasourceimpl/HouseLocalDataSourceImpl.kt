@@ -33,4 +33,8 @@ class HouseLocalDataSourceImpl(
     override suspend fun clearAll() {
         houseDao.deleteAllHouses()
     }
+
+    override suspend fun updateHouseLike(uuid: Int, isLiked: Boolean) : Int {
+        return houseDao.updateHouseLike(uuid, isLiked)
+    }
 }

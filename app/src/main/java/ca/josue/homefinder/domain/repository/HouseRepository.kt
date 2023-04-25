@@ -13,4 +13,5 @@ import kotlinx.coroutines.flow.Flow
 interface HouseRepository {
     fun getAllHouses() : Flow<PagingData<House>>
     suspend fun getSelectedHouse(id: String) : House
+    suspend fun updateHouseLike(id: String, isLiked: Boolean)
 }

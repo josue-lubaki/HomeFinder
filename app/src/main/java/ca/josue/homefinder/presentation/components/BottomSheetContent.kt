@@ -40,6 +40,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -72,8 +74,11 @@ fun BottomSheetContent(
     selectedHouse : House,
     onToggleBottomSheetState : () -> Job,
     onViewOnMapClicked : () -> Unit,
+    onLikeClicked: (Int, Boolean) -> Unit,
 ) {
     val scrollState = rememberScrollState()
+    val isFavorite = remember { mutableStateOf(selectedHouse.isLiked) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -121,12 +126,15 @@ fun BottomSheetContent(
 
                 IconButton(
                     modifier = Modifier.height(MaterialTheme.dimensions.semiExtraLarge),
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        onLikeClicked(selectedHouse.uuid, isFavorite.value)
+                        isFavorite.value = !isFavorite.value
+                    },
                 ) {
                     Icon(
-                        imageVector = if (selectedHouse.isLiked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                        imageVector = if (isFavorite.value) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                         contentDescription = "Favorite Icon",
-                        tint = if (selectedHouse.isLiked) Color.Red else MaterialTheme.colorScheme.onSurface,
+                        tint = if (isFavorite.value) Color.Red else MaterialTheme.colorScheme.onSurface,
                     )
                 }
             }
@@ -345,7 +353,8 @@ private fun BottomSheetContentPreview() {
                     scaffoldState.bottomSheetState.expand()
                 }
             },
-            onViewOnMapClicked = {  }
+            onViewOnMapClicked = {  },
+            onLikeClicked = { _,_ -> },
         )
     }
 }
