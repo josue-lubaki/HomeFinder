@@ -83,11 +83,17 @@ fun DetailsScreenRoute(
         else Toast.makeText(context, R.string.no_address_found, Toast.LENGTH_LONG).show()
     }
 
+    val onViewImageClicked = { image: String ->
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(image))
+        context.startActivity(intent)
+    }
+
     DetailsScreen(
         selectedHouse = selectedHouse,
         onBackPressed = onBackPressed,
         onViewOnMapClicked = onViewOnMapClicked,
-        onLikeClicked = onLikeClicked
+        onLikeClicked = onLikeClicked,
+        onViewImageClicked = onViewImageClicked
     )
 }
 
@@ -97,7 +103,8 @@ fun DetailsScreen(
     selectedHouse: House?,
     onBackPressed: () -> Boolean,
     onViewOnMapClicked: () -> Unit,
-    onLikeClicked : (Int, Boolean) -> Unit
+    onLikeClicked : (Int, Boolean) -> Unit,
+    onViewImageClicked: (String) -> Unit
 ) {
 
     val scope = rememberCoroutineScope()
@@ -160,6 +167,7 @@ fun DetailsScreen(
                 BackgroundContent(
                     houseImagesUrl = house.images,
                     onCloseClicked = onBackPressed,
+                    onViewImageClicked = onViewImageClicked
                 )
             }
         }
@@ -204,7 +212,8 @@ private fun DetailsScreenPreview() {
             ),
             onBackPressed = { true },
             onViewOnMapClicked = { },
-            onLikeClicked = { _, _ -> }
+            onViewImageClicked = { },
+            onLikeClicked = { _, _ -> },
         )
     }
 }
