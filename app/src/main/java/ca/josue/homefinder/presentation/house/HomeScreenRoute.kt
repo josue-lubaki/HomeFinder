@@ -6,12 +6,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -30,6 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
 import ca.josue.homefinder.R
 import ca.josue.homefinder.data.models.house.HouseType
 import ca.josue.homefinder.domain.models.Address
@@ -122,23 +123,23 @@ fun SmallHomeScreen(
     list: LazyPagingItems<House>,
     onHouseClicked: (Int) -> Unit
 ) {
-    val scrollState = rememberScrollState()
-    Column(
-        modifier = Modifier.verticalScroll(scrollState)
-    ) {
+    Column {
         HeadCard(number = list.itemSnapshotList.size)
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .padding(all = 8.dp)
                 .padding(bottom = 4.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ){
-            list.itemSnapshotList.forEach { house ->
+            items(
+                items = list,
+                key = { house -> house.id }
+            ) { house ->
                 if (house != null) {
                     CardHouse(
                         house = house,
                         isLiked = false,
-                        onHouseClicked = onHouseClicked,
+                        onHouseClicked = onHouseClicked
                     )
                 }
             }

@@ -154,7 +154,7 @@ fun DetailsScreen(
         Box(Modifier.padding(innerPadding)) {
             selectedHouse?.let { house ->
                 BackgroundContent(
-                    houseImageUrl = house.images.first(),
+                    houseImagesUrl = house.images,
                     onCloseClicked = onBackPressed,
                 )
             }

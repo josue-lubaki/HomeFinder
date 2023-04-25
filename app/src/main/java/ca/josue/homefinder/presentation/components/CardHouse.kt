@@ -6,15 +6,20 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -55,6 +60,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
+import com.google.accompanist.pager.HorizontalPagerIndicator
 
 /**
  * created by Josue Lubaki
@@ -62,6 +68,7 @@ import coil.size.Size
  * version : 1.0.0
  */
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CardHouse(
     house: House,
@@ -70,6 +77,7 @@ fun CardHouse(
     onHouseClicked: (Int) -> Unit,
 ) {
 
+    val images = house.images
     val isLarge = windowSize == WindowWidthSizeClass.Expanded
     val imageSize =
         if (isLarge) MaterialTheme.dimensions.imageHeightSmall
@@ -89,7 +97,6 @@ fun CardHouse(
         verticalArrangement = Arrangement.Top
     ) {
 
-        val images = house.images
 
         val shimmerColor = listOf(
             MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f),
@@ -116,6 +123,8 @@ fun CardHouse(
         )
 
         val painter = rememberAsyncImagePainter(
+            placeholder = painterResource(id = R.drawable.ic_placeholder),
+            error = painterResource(id = R.drawable.ic_placeholder),
             model = ImageRequest.Builder(LocalContext.current)
                 .data(images[0])
                 .crossfade(true)
@@ -123,14 +132,41 @@ fun CardHouse(
                 .build()
         )
 
+        val pagerState = rememberPagerState()
+
         when (painter.state) {
             is AsyncImagePainter.State.Success -> {
-                Image(
-                    modifier = Modifier.height(imageSize),
-                    painter = painter,
-                    contentDescription = "Profile Picture",
-                    contentScale = ContentScale.Crop,
-                )
+                Box {
+                    HorizontalPager(
+                        pageCount = images.size - 1,
+                        modifier = Modifier.height(imageSize),
+                        state = pagerState
+                    ) {
+                        Image(
+                            modifier = Modifier.fillMaxSize(),
+                            painter = rememberAsyncImagePainter(
+                                model = ImageRequest.Builder(LocalContext.current)
+                                    .data(images[it])
+                                    .crossfade(true)
+                                    .size(Size.ORIGINAL)
+                                    .build()
+                            ),
+                            contentDescription = "House Picture",
+                            contentScale = ContentScale.Crop,
+                        )
+                    }
+
+
+                    HorizontalPagerIndicator(
+                        modifier = Modifier
+                            .padding(vertical = MaterialTheme.dimensions.small)
+                            .align(Alignment.BottomCenter),
+                        pagerState = pagerState,
+                        pageCount = images.size - 1,
+                        activeColor = Color.White,
+                        inactiveColor = Color.White.copy(alpha = 0.2f),
+                    )
+                }
             }
 
             is AsyncImagePainter.State.Loading -> {
