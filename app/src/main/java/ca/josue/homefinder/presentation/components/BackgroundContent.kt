@@ -4,6 +4,7 @@ package ca.josue.homefinder.presentation.components
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -44,6 +45,7 @@ import com.google.accompanist.pager.HorizontalPagerIndicator
 fun BackgroundContent(
     houseImagesUrl: List<String>,
     onCloseClicked: () -> Boolean,
+    onViewImageClicked: (String) -> Unit,
 ) {
     val pagerState = rememberPagerState()
 
@@ -66,7 +68,10 @@ fun BackgroundContent(
                 state = pagerState
             ) {
                 Image(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clickable { onViewImageClicked(houseImagesUrl[it]) }
+                    ,
                     painter = rememberAsyncImagePainter(
                         placeholder = painterResource(id = R.drawable.ic_placeholder),
                         error = painterResource(id = R.drawable.ic_placeholder),
@@ -117,5 +122,6 @@ private fun BackgroundContentPreview() {
     BackgroundContent(
         houseImagesUrl = listOf(),
         onCloseClicked = { false },
+        onViewImageClicked = { }
     )
 }
