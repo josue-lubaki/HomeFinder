@@ -16,4 +16,5 @@ interface HouseLocalDataSource {
     suspend fun getHouseFromDB(uuid: Int): HouseLocalStatus
     suspend fun saveHousesToDB(houses: List<House>)
     suspend fun clearAll()
+    suspend fun updateHouseLike(uuid: Int, isLiked: Boolean) : Int
 }

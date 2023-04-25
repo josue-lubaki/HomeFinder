@@ -50,7 +50,8 @@ import kotlinx.coroutines.flow.flowOf
 fun HomeScreenRoute(
     windowSize: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
     viewModel: HomeViewModel,
-    onHouseClicked: (Int) -> Unit
+    onHouseClicked: (Int) -> Unit,
+    onLikeClicked: (Int, Boolean) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val allHouses = remember { mutableStateOf<Flow<PagingData<House>>>(flowOf()) }
@@ -77,12 +78,14 @@ fun HomeScreenRoute(
     if (windowSize == WindowWidthSizeClass.Expanded) {
         LargeHomeScreen(
             list = allHouses.value.collectAsLazyPagingItems(),
-            onHouseClicked = onHouseClicked
+            onHouseClicked = onHouseClicked,
+            onLikeClicked = onLikeClicked
         )
     } else {
         SmallHomeScreen(
             list = allHouses.value.collectAsLazyPagingItems(),
-            onHouseClicked = onHouseClicked
+            onHouseClicked = onHouseClicked,
+            onLikeClicked = onLikeClicked
         )
     }
 }
@@ -90,7 +93,8 @@ fun HomeScreenRoute(
 @Composable
 fun LargeHomeScreen(
     list: LazyPagingItems<House>,
-    onHouseClicked: (Int) -> Unit
+    onHouseClicked: (Int) -> Unit,
+    onLikeClicked: (Int, Boolean) -> Unit
 ) {
     val scrollState = rememberScrollState()
     val lazyGridState = rememberLazyGridState()
@@ -109,9 +113,9 @@ fun LargeHomeScreen(
             ) { house ->
                 CardHouse(
                     house = house,
-                    isLiked = false,
                     windowSize = WindowWidthSizeClass.Expanded,
-                    onHouseClicked = onHouseClicked
+                    onHouseClicked = onHouseClicked,
+                    onLikeClicked = onLikeClicked
                 )
             }
         }
@@ -121,7 +125,8 @@ fun LargeHomeScreen(
 @Composable
 fun SmallHomeScreen(
     list: LazyPagingItems<House>,
-    onHouseClicked: (Int) -> Unit
+    onHouseClicked: (Int) -> Unit,
+    onLikeClicked: (Int, Boolean) -> Unit
 ) {
     Column {
         HeadCard(number = list.itemSnapshotList.size)
@@ -138,8 +143,8 @@ fun SmallHomeScreen(
                 if (house != null) {
                     CardHouse(
                         house = house,
-                        isLiked = false,
-                        onHouseClicked = onHouseClicked
+                        onHouseClicked = onHouseClicked,
+                        onLikeClicked = onLikeClicked
                     )
                 }
             }
@@ -189,6 +194,7 @@ private fun HomeScreenPreview() {
     HomeFinderTheme {
         SmallHomeScreen(
             onHouseClicked = {},
+            onLikeClicked = { _,_ -> },
             list = flowOf(
                 PagingData.from(
                     listOf(

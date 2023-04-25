@@ -33,6 +33,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -72,12 +74,13 @@ import com.google.accompanist.pager.HorizontalPagerIndicator
 @Composable
 fun CardHouse(
     house: House,
-    isLiked: Boolean = false,
     windowSize: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
     onHouseClicked: (Int) -> Unit,
+    onLikeClicked: (Int, Boolean) -> Unit,
 ) {
 
     val images = house.images
+    val isFavorite = remember { mutableStateOf(house.isLiked) }
     val isLarge = windowSize == WindowWidthSizeClass.Expanded
     val imageSize =
         if (isLarge) MaterialTheme.dimensions.imageHeightSmall
@@ -209,12 +212,15 @@ fun CardHouse(
 
                 IconButton(
                     modifier = Modifier.height(MaterialTheme.dimensions.semiExtraLarge),
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        onLikeClicked(house.uuid, isFavorite.value)
+                        isFavorite.value = !isFavorite.value
+                    },
                 ) {
                     Icon(
-                        imageVector = if (isLiked) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                        imageVector = if (isFavorite.value) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                         contentDescription = "Favorite Icon",
-                        tint = if (isLiked) Color.Red else MaterialTheme.colorScheme.onSurface,
+                        tint = if (isFavorite.value) Color.Red else MaterialTheme.colorScheme.onSurface,
                     )
                 }
             }
@@ -273,8 +279,8 @@ private fun CardHousePreview() {
         ) {
             CardHouse(
                 windowSize = WindowWidthSizeClass.Expanded,
-                isLiked = true,
                 onHouseClicked = { /*TODO*/ },
+                onLikeClicked = { _,_ -> },
                 house = House(
                     id = "1",
                     uuid = 1,

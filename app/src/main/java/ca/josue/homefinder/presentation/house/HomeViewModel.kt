@@ -8,6 +8,7 @@ import ca.josue.homefinder.domain.models.HouseRemoteStatus
 import ca.josue.homefinder.domain.usecases.UseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -32,6 +33,7 @@ class HomeViewModel @Inject constructor(
 
     private sealed class HomeAction {
         object GetAllHouses : HomeAction()
+        data class UpdateHouseLike(val uuid: Int, val liked: Boolean) : HomeAction()
         data class GetAllHousesSuccess(val houses: Flow<PagingData<House>>) : HomeAction()
         data class GetAllHousesError(val exception: Exception) : HomeAction()
     }
@@ -54,16 +56,30 @@ class HomeViewModel @Inject constructor(
             }
 
             is HomeAction.GetAllHousesSuccess -> {
-                _state.value = HomeState.Success(action.houses)
+                viewModelScope.launch(dispatchers) {
+                    _state.value = HomeState.Success(action.houses)
+                }
             }
 
             is HomeAction.GetAllHousesError -> {
-                _state.value = HomeState.Error(action.exception)
+                viewModelScope.launch(dispatchers) {
+                    _state.value = HomeState.Error(action.exception)
+                }
+            }
+
+            is HomeAction.UpdateHouseLike -> {
+                viewModelScope.launch(Dispatchers.Main) {
+                    useCase.updateHouseLikeUseCase(action.uuid, action.liked)
+                }
             }
         }
     }
 
     fun onGetAllHouses() {
         dispatch(HomeAction.GetAllHouses)
+    }
+
+    fun onUpdateHouseLike(uuid: Int, liked: Boolean) {
+        dispatch(HomeAction.UpdateHouseLike(uuid, liked.not()))
     }
 }

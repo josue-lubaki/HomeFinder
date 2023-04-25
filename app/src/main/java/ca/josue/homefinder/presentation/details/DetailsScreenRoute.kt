@@ -53,7 +53,8 @@ import kotlinx.coroutines.launch
 fun DetailsScreenRoute(
     houseUuid : Int,
     viewModel: DetailsViewModel,
-    onBackPressed: () -> Boolean
+    onBackPressed: () -> Boolean,
+    onLikeClicked: (Int, Boolean) -> Unit,
 ) {
     val context = LocalContext.current
 
@@ -85,7 +86,8 @@ fun DetailsScreenRoute(
     DetailsScreen(
         selectedHouse = selectedHouse,
         onBackPressed = onBackPressed,
-        onViewOnMapClicked = onViewOnMapClicked
+        onViewOnMapClicked = onViewOnMapClicked,
+        onLikeClicked = onLikeClicked
     )
 }
 
@@ -94,7 +96,8 @@ fun DetailsScreenRoute(
 fun DetailsScreen(
     selectedHouse: House?,
     onBackPressed: () -> Boolean,
-    onViewOnMapClicked: () -> Unit
+    onViewOnMapClicked: () -> Unit,
+    onLikeClicked : (Int, Boolean) -> Unit
 ) {
 
     val scope = rememberCoroutineScope()
@@ -146,7 +149,8 @@ fun DetailsScreen(
                         scaffoldState = scaffoldState,
                         selectedHouse = it,
                         onToggleBottomSheetState = onToggleBottomSheetState,
-                        onViewOnMapClicked = onViewOnMapClicked
+                        onViewOnMapClicked = onViewOnMapClicked,
+                        onLikeClicked = onLikeClicked
                     )
                 }
             }
@@ -199,7 +203,8 @@ private fun DetailsScreenPreview() {
                 ),
             ),
             onBackPressed = { true },
-            onViewOnMapClicked = { }
+            onViewOnMapClicked = { },
+            onLikeClicked = { _, _ -> }
         )
     }
 }

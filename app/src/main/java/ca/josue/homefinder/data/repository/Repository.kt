@@ -27,6 +27,10 @@ class Repository @Inject constructor(
         return localDataSource.getHouseFromDB(uuid)
     }
 
+    suspend fun updateHouseLike(uuid: Int, isLiked: Boolean): Int {
+        return localDataSource.updateHouseLike(uuid, isLiked)
+    }
+
     suspend fun onSaveBoardingState(completed: Boolean) {
         dataStore.saveOnBoardingState(completed)
     }

@@ -126,6 +126,11 @@ fun Content(
             navController.popBackStack()
         }
 
+        val onLikeClicked = { uuid: Int, isLiked: Boolean ->
+            homeViewModel.onUpdateHouseLike(uuid, isLiked)
+        }
+
+
         NavHost(
             navController = navController,
             startDestination = Screen.Home.route
@@ -136,7 +141,8 @@ fun Content(
                     viewModel = homeViewModel,
                     onHouseClicked = { houseUuid ->
                         navController.navigate(Screen.Details.passHeroId(houseUuid))
-                    }
+                    },
+                    onLikeClicked = onLikeClicked
                 )
             }
 
@@ -150,7 +156,8 @@ fun Content(
                 DetailsScreenRoute(
                     houseUuid = houseUuid,
                     viewModel = detailsViewModel,
-                    onBackPressed = onBackPressed
+                    onBackPressed = onBackPressed,
+                    onLikeClicked = onLikeClicked
                 )
             }
         }

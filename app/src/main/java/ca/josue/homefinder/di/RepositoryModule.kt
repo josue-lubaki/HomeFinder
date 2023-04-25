@@ -13,6 +13,7 @@ import ca.josue.homefinder.domain.usecases.get_house_details.GetHouseDetailsUseC
 import ca.josue.homefinder.domain.usecases.read_onboarding.ReadOnBoardingUseCase
 import ca.josue.homefinder.domain.usecases.save_access_token.SaveAccessTokenUseCase
 import ca.josue.homefinder.domain.usecases.save_onboarding.SaveOnBoardingUseCase
+import ca.josue.homefinder.domain.usecases.update_house_like.UpdateHouseLikeUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,6 +46,7 @@ object RepositoryModule {
             readOnBoardingUseCase = ReadOnBoardingUseCase(repository),
             saveOnBoardingUseCase = SaveOnBoardingUseCase(repository),
             saveAccessTokenUseCase = SaveAccessTokenUseCase(repository),
+            updateHouseLikeUseCase = UpdateHouseLikeUseCase(repository)
         )
     }
 }
