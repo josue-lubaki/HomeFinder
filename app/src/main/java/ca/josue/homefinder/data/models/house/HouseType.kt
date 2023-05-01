@@ -11,4 +11,5 @@ enum class HouseType {
     CONDO,
     MULTIPLEX,
     CHALET,
+    APPARTMENT
 }
