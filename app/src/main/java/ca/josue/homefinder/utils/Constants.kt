@@ -36,6 +36,7 @@ object Constants {
             HouseType.SINGLE_FAMILY.name -> R.string.single_family
             HouseType.MULTIPLEX.name -> R.string.multiplex
             HouseType.CHALET.name -> R.string.chalet
+            HouseType.APPARTMENT.name -> R.string.appartment
             else -> R.string.unknown_type
         }
     }
@@ -46,6 +47,7 @@ object Constants {
             HouseType.SINGLE_FAMILY.name -> Icons.Outlined.Home
             HouseType.MULTIPLEX.name -> Icons.Outlined.Domain
             HouseType.CHALET.name -> Icons.Outlined.Chalet
+            HouseType.APPARTMENT.name -> Icons.Outlined.Apartment
             else -> Icons.Outlined.Home
         }
     }

@@ -82,7 +82,7 @@ fun BottomSheetContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = MaterialTheme.dimensions.medium)
+            .padding(vertical = MaterialTheme.dimensions.medium)
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {

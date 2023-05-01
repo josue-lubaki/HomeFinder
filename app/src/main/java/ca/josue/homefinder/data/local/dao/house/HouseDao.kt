@@ -16,10 +16,10 @@ import ca.josue.homefinder.domain.models.House
 @Dao
 interface HouseDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertHouse(house: House)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertHouses(houses: List<House>)
 
     @Query("DELETE FROM houses_table")
