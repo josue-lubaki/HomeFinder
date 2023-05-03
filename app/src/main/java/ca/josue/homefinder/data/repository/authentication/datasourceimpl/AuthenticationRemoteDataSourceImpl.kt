@@ -5,6 +5,8 @@ import ca.josue.homefinder.data.repository.authentication.datasource.Authenticat
 import ca.josue.homefinder.domain.models.Authentication
 import ca.josue.homefinder.domain.models.AuthenticationStatus
 import ca.josue.homefinder.domain.usecases.UseCases
+import ca.josue.homefinder.utils.handleErrorResponse
+import ca.josue.homefinder.utils.handleException
 import javax.inject.Inject
 
 /**
@@ -25,10 +27,10 @@ class AuthenticationRemoteDataSourceImpl @Inject constructor(
                 useCases.saveAccessTokenUseCase(token)
                 AuthenticationStatus.Success
             } else {
-                AuthenticationStatus.Error(Exception(response.message()))
+                AuthenticationStatus.Error(handleErrorResponse(response.code()))
             }
         } catch (e: Exception) {
-            AuthenticationStatus.Error(e)
+            AuthenticationStatus.Error(handleException(e))
         }
     }
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import ca.josue.homefinder.domain.models.House
 import ca.josue.homefinder.domain.models.HouseLocalStatus
 import ca.josue.homefinder.domain.usecases.UseCases
+import ca.josue.homefinder.utils.HttpError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,7 +28,7 @@ class DetailsViewModel @Inject constructor(
     private sealed class DetailsAction {
         data class GetHouseDetails(val houseId: Int) : DetailsAction()
         data class GetHouseDetailsSuccess(val house: House) : DetailsAction()
-        data class GetHouseDetailsError(val exception: Exception) : DetailsAction()
+        data class GetHouseDetailsError(val exception: HttpError) : DetailsAction()
     }
 
     private fun dispatch(action: DetailsAction) {
@@ -53,7 +54,7 @@ class DetailsViewModel @Inject constructor(
     }
 
     private fun DetailsAction.GetHouseDetailsError.reduce() {
-        _state.value = DetailState.Error(exception.message)
+        _state.value = DetailState.Error(exception.getErrorMessage())
     }
 
     fun getHouseDetails(houseId: Int) {

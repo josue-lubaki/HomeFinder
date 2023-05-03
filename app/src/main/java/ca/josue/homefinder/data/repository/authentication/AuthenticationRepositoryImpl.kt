@@ -16,10 +16,6 @@ class AuthenticationRepositoryImpl @Inject constructor(
     private val remoteDataSource: AuthenticationRemoteDataSource
 ) : AuthenticationRepository {
     override suspend fun login(request: Authentication): AuthenticationStatus {
-        return try {
-            remoteDataSource.login(request)
-        } catch (e: Exception) {
-            AuthenticationStatus.Error(e)
-        }
+        return remoteDataSource.login(request)
     }
 }
