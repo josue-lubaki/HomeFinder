@@ -4,6 +4,7 @@ import ca.josue.homefinder.data.repository.authentication.AuthenticationReposito
 import ca.josue.homefinder.data.repository.authentication.datasource.AuthenticationRemoteDataSource
 import ca.josue.homefinder.domain.models.Authentication
 import ca.josue.homefinder.domain.models.AuthenticationStatus
+import ca.josue.homefinder.utils.HttpError
 import io.mockk.coEvery
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
@@ -34,7 +35,7 @@ class LoginRepositoryTest {
     fun `login() returns error`() = runTest {
         // given
         val user = Authentication(username = "test@test.com", password = "password")
-        val expectedStatus = AuthenticationStatus.Error(Exception("Error"))
+        val expectedStatus = AuthenticationStatus.Error(HttpError.UNKNOWN)
         coEvery { authenticationRemoteDataSource.login(user) } returns expectedStatus
 
         // when
