@@ -136,6 +136,13 @@ dependencies {
 
     // lottie airbnb
     implementation "com.airbnb.android:lottie-compose:$lottie_version"
+
+    // exoplayer core & ui
+    implementation "com.google.android.exoplayer:exoplayer-core:$exoplayer_version"
+    implementation "com.google.android.exoplayer:exoplayer-ui:$exoplayer_version"
+
+    // accompanist insets
+    implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
 }
 
 kapt {

@@ -1,8 +1,8 @@
 package ca.josue.homefinder.presentation.login
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imeNestedScroll
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -20,6 +21,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowCircleRight
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,6 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,19 +44,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ca.josue.homefinder.R
 import ca.josue.homefinder.presentation.components.CircularProgressBar
 import ca.josue.homefinder.ui.theme.HomeFinderTheme
 import ca.josue.homefinder.ui.theme.dimensions
+import ca.josue.homefinder.utils.buildExoPlayer
+import ca.josue.homefinder.utils.buildPlayerView
 
 /**
  * created by Josue Lubaki
@@ -64,16 +70,28 @@ import ca.josue.homefinder.ui.theme.dimensions
 @Composable
 fun LoginScreenRoute(
     windowSize: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
+    videoUri : Uri,
     viewModel: LoginViewModel,
     onNavigateToRegister: () -> Unit,
     onNavigateToHome: () -> Unit,
 ) {
+    val context = LocalContext.current
+    val exoplayer = remember { context.buildExoPlayer(videoUri) }
 
     val state by viewModel.state.collectAsStateWithLifecycle()
     val errorMessage = rememberSaveable { mutableStateOf<Int?>(null) }
 
     val onLoginPressed: (String, String) -> Unit = { username, password ->
         viewModel.onLogin(username, password)
+    }
+
+    DisposableEffect(AndroidView(
+        factory = { it.buildPlayerView(exoplayer) },
+        modifier = Modifier.fillMaxSize()
+    )) {
+        onDispose {
+            exoplayer.release()
+        }
     }
 
     LaunchedEffect(key1 = state){
@@ -88,7 +106,6 @@ fun LoginScreenRoute(
         }
     }
 
-    val context = LocalContext.current
     LaunchedEffect(key1 = errorMessage.value){
         errorMessage.value?.let {
             Toast.makeText(context, context.getString(it), Toast.LENGTH_LONG).show()
@@ -117,19 +134,15 @@ fun LoginScreen(
     val usernameValue = rememberSaveable { mutableStateOf("josuelubaki") }
     val passwordValue = rememberSaveable { mutableStateOf("Josue2022@") }
     val isPasswordValid = remember(passwordValue.value) { passwordValue.value.length >= 6 }
+    val isPasswordVisible = rememberSaveable { mutableStateOf(false) }
     val isFormValid = remember(usernameValue.value, passwordValue.value) {
         usernameValue.value.isNotEmpty() && isPasswordValid
     }
 
-    Image(
-        painter = painterResource(id = R.drawable.login4),
-        contentDescription = "Logo image",
-        modifier = Modifier.fillMaxSize(),
-        contentScale = ContentScale.FillBounds
-    )
-
     Column(
         modifier = Modifier
+            .navigationBarsPadding()
+            .imePadding()
             .fillMaxSize()
             .background(
                 brush = Brush.verticalGradient(
@@ -192,13 +205,39 @@ fun LoginScreen(
                         },
                         value = passwordValue.value,
                         onValueChange = passwordValue::value::set,
-                        visualTransformation = PasswordVisualTransformation(),
+                        visualTransformation =
+                            if (isPasswordVisible.value) {
+                                VisualTransformation.None
+                            } else {
+                                PasswordVisualTransformation()
+                            },
                         colors = TextFieldDefaults.textFieldColors(
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
                             containerColor = MaterialTheme.colorScheme.surface,
                         ),
-                        shape = CircleShape
+                        shape = CircleShape,
+                        trailingIcon = {
+                            // visibility icon
+                            IconButton(
+                                modifier = Modifier
+                                    .padding(end = MaterialTheme.dimensions.medium)
+                                    .size(MaterialTheme.dimensions.semiLarge)
+                                ,
+                                onClick = {
+                                    isPasswordVisible.value = !isPasswordVisible.value
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = if (isPasswordVisible.value) {
+                                        Icons.Filled.Visibility
+                                    } else {
+                                        Icons.Filled.VisibilityOff
+                                    },
+                                    contentDescription = null,
+                                )
+                            }
+                        }
                     )
                 }
 
@@ -213,7 +252,7 @@ fun LoginScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
-                            .padding(MaterialTheme.dimensions.medium)
+                            .padding(MaterialTheme.dimensions.semiMedium)
                             .height(MaterialTheme.dimensions.semiXLarge)
                         ,
                         colors = ButtonDefaults.buttonColors(
@@ -233,7 +272,7 @@ fun LoginScreen(
                     IconButton(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(end = MaterialTheme.dimensions.medium)
+                            .padding(end = MaterialTheme.dimensions.semiMedium)
                             .weight(.3f)
                             .height(MaterialTheme.dimensions.xLarge),
                         onClick = { onLoginPressed(
@@ -246,8 +285,8 @@ fun LoginScreen(
                             imageVector = Icons.Default.ArrowCircleRight,
                             contentDescription = null,
                             tint =
-                            if (isFormValid) Color(0xFF12B32D)
-                            else Color(0xFFB2BBB4),
+                                if (isFormValid) Color(0xFF12B32D)
+                                else Color(0xFFB2BBB4),
                             modifier = Modifier.size(MaterialTheme.dimensions.xLarge)
                         )
                     }

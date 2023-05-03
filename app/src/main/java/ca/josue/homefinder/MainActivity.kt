@@ -1,5 +1,6 @@
 package ca.josue.homefinder
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -30,11 +31,17 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     SetupNavGraph(
+                        videoUri = getVideoUri(),
                         navController = navController,
                         windowSize = windowSize.widthSizeClass
                     )
                 }
             }
         }
+    }
+
+    private fun getVideoUri() : Uri {
+        val videoUri = "android.resource://$packageName/${R.raw.house}"
+        return Uri.parse(videoUri)
     }
 }
