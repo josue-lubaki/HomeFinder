@@ -6,6 +6,7 @@ import ca.josue.homefinder.domain.models.AuthenticationStatus
 import ca.josue.homefinder.domain.usecases.login_user.LoginUseCase
 import ca.josue.homefinder.presentation.login.LoginState
 import ca.josue.homefinder.presentation.login.LoginViewModel
+import ca.josue.homefinder.utils.HttpError
 import io.mockk.coEvery
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
@@ -67,7 +68,7 @@ class LoginViewModelTest {
     @Test
     fun `test onLoginClicked sends Error state`() = runTest {
         // Given
-        val expectedStatus = AuthenticationStatus.Error(Exception("Error"))
+        val expectedStatus = AuthenticationStatus.Error(HttpError.UNKNOWN)
         coEvery { mockLoginUseCase.invoke(any()) } returns expectedStatus
 
         // When
@@ -78,12 +79,12 @@ class LoginViewModelTest {
 
         // Then
         assertEquals(
-            LoginState.Error(Exception("Error")).javaClass,
+            LoginState.Error(HttpError.UNKNOWN.getErrorMessage()).javaClass,
             loginViewModel.state.value.javaClass
         )
         assertEquals(
-            expectedStatus.exception.message,
-            (loginViewModel.state.value as LoginState.Error).exception.message
+            expectedStatus.exception.getErrorMessage(),
+            (loginViewModel.state.value as LoginState.Error).message
         )
     }
 

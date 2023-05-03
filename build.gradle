@@ -24,6 +24,7 @@ buildscript {
         serialization_version = findProperty("version.serialization")
         paging_compose_version = findProperty("version.paging.compose")
         lottie_version = findProperty("version.lottie")
+        exoplayer_version = findProperty("version.exoplayer")
     }
     dependencies {
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_dagger_version"
