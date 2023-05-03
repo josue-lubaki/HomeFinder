@@ -55,7 +55,7 @@ fun HomeScreenRoute(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val allHouses = remember { mutableStateOf<Flow<PagingData<House>>>(flowOf()) }
-    val errorMessage = rememberSaveable { mutableStateOf<String?>(null) }
+    val errorMessage = rememberSaveable { mutableStateOf<Int?>(null) }
 
     LaunchedEffect(key1 = Unit) {
         viewModel.onGetAllHouses()
@@ -68,7 +68,7 @@ fun HomeScreenRoute(
             }
 
             is HomeState.Error -> {
-                errorMessage.value = (state as HomeState.Error).exception.message
+                errorMessage.value = (state as HomeState.Error).message
             }
 
             else -> Unit

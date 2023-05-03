@@ -70,7 +70,7 @@ fun LoginScreenRoute(
 ) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val errorMessage = rememberSaveable { mutableStateOf<String?>(null) }
+    val errorMessage = rememberSaveable { mutableStateOf<Int?>(null) }
 
     val onLoginPressed: (String, String) -> Unit = { username, password ->
         viewModel.onLogin(username, password)
@@ -82,7 +82,7 @@ fun LoginScreenRoute(
                 onNavigateToHome()
             }
             is LoginState.Error -> {
-                errorMessage.value = (state as LoginState.Error).exception.message
+                errorMessage.value = (state as LoginState.Error).message
             }
             else -> Unit
         }
@@ -91,7 +91,7 @@ fun LoginScreenRoute(
     val context = LocalContext.current
     LaunchedEffect(key1 = errorMessage.value){
         errorMessage.value?.let {
-            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            Toast.makeText(context, context.getString(it), Toast.LENGTH_LONG).show()
         }
     }
 

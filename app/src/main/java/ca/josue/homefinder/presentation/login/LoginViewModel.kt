@@ -6,6 +6,7 @@ import ca.josue.homefinder.domain.models.Authentication
 import ca.josue.homefinder.domain.models.AuthenticationStatus.Error
 import ca.josue.homefinder.domain.models.AuthenticationStatus.Success
 import ca.josue.homefinder.domain.usecases.login_user.LoginUseCase
+import ca.josue.homefinder.utils.HttpError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,7 +33,7 @@ class LoginViewModel @Inject constructor(
     private sealed class LoginAction {
         data class Login(val request: Authentication) : LoginAction()
         object LoginSuccess : LoginAction()
-        data class LoginError(val error: Exception) : LoginAction()
+        data class LoginError(val error: HttpError) : LoginAction()
     }
 
     private fun dispatchAction(action: LoginAction) {
@@ -58,7 +59,7 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun LoginAction.LoginError.reduce() {
-        _state.value = LoginState.Error(error)
+        _state.value = LoginState.Error(error.getErrorMessage())
     }
 
     fun onLogin(username: String, password: String) {

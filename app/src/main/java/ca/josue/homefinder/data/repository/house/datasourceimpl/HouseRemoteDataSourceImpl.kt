@@ -9,6 +9,7 @@ import ca.josue.homefinder.data.remote.HouseService
 import ca.josue.homefinder.data.repository.house.datasource.HouseRemoteDataSource
 import ca.josue.homefinder.domain.models.HouseRemoteStatus
 import ca.josue.homefinder.utils.Constants.ITEMS_PER_PAGE
+import ca.josue.homefinder.utils.handleException
 
 /**
  * created by Josue Lubaki
@@ -39,7 +40,9 @@ class HouseRemoteDataSourceImpl(
                 ).flow
             )
         } catch (e: Exception) {
-            HouseRemoteStatus.Error(e)
+            HouseRemoteStatus.Error(
+                handleException(e)
+            )
         }
     }
 }

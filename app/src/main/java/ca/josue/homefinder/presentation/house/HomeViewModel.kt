@@ -6,6 +6,7 @@ import androidx.paging.PagingData
 import ca.josue.homefinder.domain.models.House
 import ca.josue.homefinder.domain.models.HouseRemoteStatus
 import ca.josue.homefinder.domain.usecases.UseCases
+import ca.josue.homefinder.utils.HttpError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -35,7 +36,7 @@ class HomeViewModel @Inject constructor(
         object GetAllHouses : HomeAction()
         data class UpdateHouseLike(val uuid: Int, val liked: Boolean) : HomeAction()
         data class GetAllHousesSuccess(val houses: Flow<PagingData<House>>) : HomeAction()
-        data class GetAllHousesError(val exception: Exception) : HomeAction()
+        data class GetAllHousesError(val exception: HttpError) : HomeAction()
     }
 
     private fun dispatch(action: HomeAction) {
@@ -63,7 +64,7 @@ class HomeViewModel @Inject constructor(
 
             is HomeAction.GetAllHousesError -> {
                 viewModelScope.launch(dispatchers) {
-                    _state.value = HomeState.Error(action.exception)
+                    _state.value = HomeState.Error(action.exception.getErrorMessage())
                 }
             }
 

@@ -5,6 +5,7 @@ import ca.josue.homefinder.data.local.dao.house.HouseDao
 import ca.josue.homefinder.data.repository.house.datasource.HouseLocalDataSource
 import ca.josue.homefinder.domain.models.House
 import ca.josue.homefinder.domain.models.HouseLocalStatus
+import ca.josue.homefinder.utils.HttpError
 
 /**
  * created by Josue Lubaki
@@ -21,7 +22,7 @@ class HouseLocalDataSourceImpl(
 
     override suspend fun getHouseFromDB(uuid: Int): HouseLocalStatus {
         return when (val house = houseDao.getHouseById(uuid)) {
-            null -> HouseLocalStatus.Error(Exception("House not found"))
+            null -> HouseLocalStatus.Error(HttpError.HOUSE_NOT_FOUND)
             else -> HouseLocalStatus.Success(house)
         }
     }
