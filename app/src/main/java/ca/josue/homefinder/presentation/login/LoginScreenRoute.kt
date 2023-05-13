@@ -1,7 +1,6 @@
 package ca.josue.homefinder.presentation.login
 
 import android.annotation.SuppressLint
-import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -34,7 +33,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,14 +49,11 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ca.josue.homefinder.R
 import ca.josue.homefinder.presentation.components.CircularProgressBar
 import ca.josue.homefinder.ui.theme.HomeFinderTheme
 import ca.josue.homefinder.ui.theme.dimensions
-import ca.josue.homefinder.utils.buildExoPlayer
-import ca.josue.homefinder.utils.buildPlayerView
 
 /**
  * created by Josue Lubaki
@@ -70,28 +65,17 @@ import ca.josue.homefinder.utils.buildPlayerView
 @Composable
 fun LoginScreenRoute(
     windowSize: WindowWidthSizeClass = WindowWidthSizeClass.Compact,
-    videoUri : Uri,
     viewModel: LoginViewModel,
     onNavigateToRegister: () -> Unit,
     onNavigateToHome: () -> Unit,
 ) {
     val context = LocalContext.current
-    val exoplayer = remember { context.buildExoPlayer(videoUri) }
 
     val state by viewModel.state.collectAsStateWithLifecycle()
     val errorMessage = rememberSaveable { mutableStateOf<Int?>(null) }
 
     val onLoginPressed: (String, String) -> Unit = { username, password ->
         viewModel.onLogin(username, password)
-    }
-
-    DisposableEffect(AndroidView(
-        factory = { it.buildPlayerView(exoplayer) },
-        modifier = Modifier.fillMaxSize()
-    )) {
-        onDispose {
-            exoplayer.release()
-        }
     }
 
     LaunchedEffect(key1 = state){

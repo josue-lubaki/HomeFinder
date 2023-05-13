@@ -1,9 +1,7 @@
 package ca.josue.homefinder.navigation
 
-import android.net.Uri
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import ca.josue.homefinder.presentation.login.LoginScreenRoute
@@ -16,9 +14,7 @@ import ca.josue.homefinder.presentation.login.LoginViewModel
  */
 
 fun NavGraphBuilder.authNavigationGraph(
-    navController: NavHostController,
     windowSize: WindowWidthSizeClass,
-    videoUri : Uri,
     loginViewModel : LoginViewModel,
     onNavigateToRegister: () -> Unit,
     onNavigateToHome: () -> Unit,
@@ -29,7 +25,6 @@ fun NavGraphBuilder.authNavigationGraph(
     ) {
         composable(Screen.Login.route) {
             LoginScreenRoute(
-                videoUri = videoUri,
                 windowSize = windowSize,
                 viewModel = loginViewModel,
                 onNavigateToRegister = onNavigateToRegister,
