@@ -9,10 +9,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.compose.rememberNavController
 import ca.josue.homefinder.navigation.SetupNavGraph
 import ca.josue.homefinder.ui.theme.HomeFinderTheme
+import ca.josue.homefinder.utils.buildExoPlayer
+import ca.josue.homefinder.utils.buildPlayerView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,6 +28,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val windowSize = calculateWindowSizeClass(activity = this)
             val navController = rememberNavController()
+            val exoplayer = remember { this.buildExoPlayer(getVideoUri()) }
 
             HomeFinderTheme {
                 // A surface container using the 'background' color from the theme
@@ -30,8 +36,19 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+
+                    DisposableEffect(
+                        AndroidView(
+                            factory = { it.buildPlayerView(exoplayer) },
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    ) {
+                        onDispose {
+                            exoplayer.release()
+                        }
+                    }
+
                     SetupNavGraph(
-                        videoUri = getVideoUri(),
                         navController = navController,
                         windowSize = windowSize.widthSizeClass
                     )
@@ -40,8 +57,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun getVideoUri() : Uri {
-        val videoUri = "android.resource://$packageName/${R.raw.house}"
+    private fun getVideoUri(): Uri {
+        val videoUri = "android.resource://$packageName/${R.raw.houses}"
         return Uri.parse(videoUri)
     }
 }

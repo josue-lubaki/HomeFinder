@@ -1,6 +1,6 @@
 package ca.josue.homefinder.presentation.splash
 
 sealed class SplashState {
-    object Completed : SplashState()
-    object OnBoardingNotCompleted : SplashState()
+    data object Completed : SplashState()
+    data object OnBoardingNotCompleted : SplashState()
 }

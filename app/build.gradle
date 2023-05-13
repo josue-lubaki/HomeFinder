@@ -148,3 +148,8 @@ dependencies {
 kapt {
     correctErrorTypes true
 }
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        languageVersion = "1.9"
+    }
+}
