@@ -2,39 +2,18 @@
 
 ## Demonstration
 <table>
+    <th align="center"> Onboarding </th>
+    <th> </th>
+    <th align="center"> Detail of house </th>
     <tr>
-        <th align="center">Light</th>
-        <th align="center">Dark</th>
-    </tr>
-    <tr>
-        <th align="center" colspan="2"> Onboarding </th>
-    </tr>
-    <tr>
-        <td align="center"><img src="https://videoapi-muybridge.vimeocdn.com/animated-thumbnails/image/17a5bd42-85f5-4905-8543-14c54b4b2847.gif?ClientID=vimeo-core-prod&Date=1685332410&Signature=4afc5d1d9c8bea1739c6719b9ac0a6bfac9d38c6" width=360 height=760 /></td>
-        <td align="center"><img src="https://videoapi-muybridge.vimeocdn.com/animated-thumbnails/image/24daf41a-8a39-423f-b19a-0a636a155c0e.gif?ClientID=vimeo-core-prod&Date=1685333142&Signature=facafa18e20458950e726f96ed19fad4ca8c303c" width=360 height=760 /></td>
-    </tr>
-    <tr> </tr>
-    <tr>
-        <th align="center" colspan="2"> List of houses </th>
-    </tr>
-    <tr>
-        <td align="center"><img src="https://videoapi-muybridge.vimeocdn.com/animated-thumbnails/image/45f719f9-25c9-4834-a460-d7765f5a9c76.gif?ClientID=vimeo-core-prod&Date=1685332410&Signature=d7e684bdc2df6a3ea8817e75cb4913bc35de3d20" width=360 height=760 /></td>
-        <td align="center"><img src="https://videoapi-muybridge.vimeocdn.com/animated-thumbnails/image/ac4e091a-c371-48eb-9173-bbd556773f35.gif?ClientID=vimeo-core-prod&Date=1685333322&Signature=7df44256e0dafccb147f01bbff5b5be580506b8d" width=360 height=760 /></td>
-    </tr>
-    <tr> </tr>
-    <tr>
-        <th align="center" colspan="2"> Detail of house </th>
-    </tr>
-    <tr>
-        <td align="center"><img src="https://videoapi-muybridge.vimeocdn.com/animated-thumbnails/image/4daa637e-651e-48e9-9a2c-9a4ad337f5cf.gif?ClientID=vimeo-core-prod&Date=1685332410&Signature=c57e4e56257543f7ccc512b1bcd5021f082fa9fb" width=360 height=760 /></td>
+         <td align="center"><img src="https://videoapi-muybridge.vimeocdn.com/animated-thumbnails/image/24daf41a-8a39-423f-b19a-0a636a155c0e.gif?ClientID=vimeo-core-prod&Date=1685333142&Signature=facafa18e20458950e726f96ed19fad4ca8c303c" width=360 height=760 /></td>
+        <td> </td>
         <td align="center"><img src="https://videoapi-muybridge.vimeocdn.com/animated-thumbnails/image/942a5567-f4a3-420d-bc12-c5da9152a981.gif?ClientID=vimeo-core-prod&Date=1685333322&Signature=f05b92c4897d7bf961dc6e02aee38c5dcea35a0c" width=360 height=760 /></td>
     </tr>
-    <tr> </tr>
-    <tr>
-        <th align="center" colspan="2"> Map </th>
+     <tr>
+        <th align="center" > Map </th>
     </tr>
     <tr>
-        <td align="center"><img src="https://videoapi-muybridge.vimeocdn.com/animated-thumbnails/image/cf9b0f57-fc67-4c98-8903-6b13b894f564.gif?ClientID=vimeo-core-prod&Date=1685333507&Signature=11f3ff4717cc733e4aa042ac376f8e743c5f0191" width=360 height=760 /></td>
         <td align="center"><img src="https://videoapi-muybridge.vimeocdn.com/animated-thumbnails/image/10ad11cc-9d7d-4fef-ae3e-918206471716.gif?ClientID=vimeo-core-prod&Date=1685333322&Signature=b244d09613f2e02009b818bb05a9795729a70a0b" width=360 height=760 /></td>
     </tr>
 </table>
